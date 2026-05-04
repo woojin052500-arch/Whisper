@@ -25,8 +25,7 @@ export default function StudentRoom() {
   const [tutorialStep, setTutorialStep] = useState(1)
 
   // Filter all questions to show only the ones belonging to THIS student
-  const questions = allQuestions.filter(q => q.student_id === student?.id)
-  const myQuestions = allQuestions.filter(q => q.student_id === student?.id)
+  const myQuestions = questions.filter(q => q.student_id === student?.id)
   
   // Get the latest version of the selected question for real-time modal updates
   const activeQuestion = selectedQuestion 
