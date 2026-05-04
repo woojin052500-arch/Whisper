@@ -76,7 +76,7 @@ export const useRealtimeStudentQuestions = (studentId: string, initialQuestions:
           filter: `student_id=eq.${studentId}`
         },
         (payload) => {
-          console.log('Real-time event received:', payload.eventType, payload.new?.id)
+          console.log('Real-time event received:', payload.eventType, (payload.new as Question)?.id)
           if (payload.eventType === 'INSERT') {
             const newQuestion = payload.new as Question
             setQuestions(prev => {

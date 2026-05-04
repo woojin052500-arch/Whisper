@@ -24,8 +24,11 @@ export default function StudentRoom() {
   const [showTutorial, setShowTutorial] = useState(false)
   const [tutorialStep, setTutorialStep] = useState(1)
 
+  // Use real-time questions hook
+  const allQuestions = useRealtimeQuestions(room?.id || '', initialQuestions)
+
   // Filter all questions to show only the ones belonging to THIS student
-  const myQuestions = questions.filter(q => q.student_id === student?.id)
+  const myQuestions = allQuestions.filter(q => q.student_id === student?.id)
   
   // Get the latest version of the selected question for real-time modal updates
   const activeQuestion = selectedQuestion 
