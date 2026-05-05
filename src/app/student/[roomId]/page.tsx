@@ -18,6 +18,7 @@ export default function StudentRoom() {
   const [questionText, setQuestionText] = useState('')
   const [initialQuestions, setInitialQuestions] = useState<Question[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState('')
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null)
