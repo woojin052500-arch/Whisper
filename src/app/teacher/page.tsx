@@ -29,6 +29,7 @@ export default function TeacherDashboard() {
   const [isFirstLogin, setIsFirstLogin] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [noticeSuccess, setNoticeSuccess] = useState(false)
+  const [showPremiumInfo, setShowPremiumInfo] = useState(false)
   const [isRequestingPayment, setIsRequestingPayment] = useState(false)
   const [paymentRequested, setPaymentRequested] = useState(false)
 
@@ -351,11 +352,11 @@ export default function TeacherDashboard() {
             </div>
             <div className="flex items-center gap-4">
               <button 
-                onClick={() => setShowPaymentPopup(true)} 
-                className={`px-8 py-4 rounded-[1.5rem] font-bold text-sm transition-all flex items-center gap-3 ${isPremium ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-amber-50 text-amber-600 border border-amber-100 shadow-sm hover:scale-105'}`}
+                onClick={() => isPremium ? setShowPremiumInfo(true) : setShowPaymentPopup(true)} 
+                className={`px-8 py-4 rounded-[1.5rem] font-bold text-sm transition-all flex items-center gap-3 ${isPremium ? 'bg-emerald-50 text-emerald-600 border border-emerald-100 shadow-sm' : 'bg-amber-50 text-amber-600 border border-amber-100 shadow-sm hover:scale-105'}`}
               >
                 <div className={`w-2 h-2 rounded-full animate-pulse ${isPremium ? 'bg-emerald-400' : 'bg-amber-400'}`}></div>
-                {isPremium ? '프리미엄 활성화' : '프리미엄 신청'}
+                {isPremium ? '프리미엄 활성화됨' : '프리미엄 신청'}
               </button>
               <button onClick={() => signOut()} className="px-6 py-4 bg-slate-50 hover:bg-slate-100 text-slate-500 rounded-[1.5rem] border border-slate-100 font-bold transition-all text-sm">로그아웃</button>
             </div>
@@ -882,8 +883,41 @@ export default function TeacherDashboard() {
         </div>
       )}
 
-      {showPaymentPopup && !isPremium && (
+      {showPremiumInfo && (
         <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 bg-indigo-950/40 backdrop-blur-3xl">
+          <div className="bg-white border border-slate-100 rounded-[4rem] p-12 sm:p-16 max-w-lg w-full shadow-2xl space-y-10 relative overflow-hidden animate-in fade-in zoom-in duration-300 text-center">
+            <div className="w-24 h-24 bg-emerald-50 rounded-[2.5rem] flex items-center justify-center mx-auto border border-emerald-100 shadow-inner">
+              <svg className="w-12 h-12 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-4xl font-bold tracking-tight text-indigo-950">프리미엄 멤버십</h3>
+              <p className="text-slate-500 font-bold text-lg leading-relaxed">
+                현재 모든 기능을 무제한으로<br/>이용하실 수 있는 상태입니다.
+              </p>
+            </div>
+            <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">이용 기간</span>
+                <span className="text-lg font-bold text-indigo-950">무제한 (평생 이용권)</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">계정 상태</span>
+                <span className="text-lg font-bold text-emerald-600">Active</span>
+              </div>
+            </div>
+            <button 
+              onClick={() => setShowPremiumInfo(false)}
+              className="w-full py-6 bg-indigo-950 text-white font-bold rounded-3xl shadow-2xl shadow-indigo-900/20 active:scale-95 transition-all text-xl"
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showPaymentPopup && !isPremium && (
           <div className="bg-white border border-slate-100 rounded-[4rem] p-10 sm:p-14 max-w-lg w-full shadow-2xl space-y-10 relative overflow-hidden animate-in fade-in zoom-in duration-300">
             {/* Decorative background */}
             <div className="absolute top-0 right-0 w-48 h-48 bg-amber-50 rounded-full blur-3xl -mr-24 -mt-24 opacity-40"></div>
