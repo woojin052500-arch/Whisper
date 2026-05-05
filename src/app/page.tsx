@@ -1,10 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 export default function Home() {
   const [roomCode, setRoomCode] = useState('')
+  const [recentRooms, setRecentRooms] = useState<any[]>([])
+
+  useEffect(() => {
+    const historyJson = localStorage.getItem('sgon_student_rooms')
+    if (historyJson) {
+      setRecentRooms(JSON.parse(historyJson))
+    }
+  }, [])
 
   return (
     <div className="min-h-screen bg-white text-slate-900 relative overflow-hidden flex flex-col items-center justify-center font-sans">
@@ -64,6 +72,37 @@ export default function Home() {
               </svg>
             </Link>
           </div>
+
+          {/* Recent Rooms Section */}
+          {recentRooms.length > 0 && (
+            <div className="space-y-4">
+              <label className="block text-[10px] font-bold text-indigo-950 uppercase tracking-[0.3em] ml-2">최근 참여한 수업</label>
+              <div className="grid grid-cols-1 gap-3">
+                {recentRooms.slice(0, 3).map((room) => (
+                  <Link 
+                    key={room.id}
+                    href={`/student/${room.id}`}
+                    className="group bg-white border border-slate-100 p-6 rounded-[2rem] flex items-center justify-between hover:border-indigo-950/20 hover:shadow-lg transition-all active:scale-[0.98]"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-950 font-bold text-xs uppercase">
+                        {room.id.slice(-2)}
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-slate-900 group-hover:text-indigo-950 transition-colors">{room.name}</h4>
+                        <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest mt-0.5">최근 접속: {new Date(room.lastJoined).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                    <div className="w-8 h-8 bg-slate-50 rounded-full flex items-center justify-center group-hover:bg-indigo-950 group-hover:text-white transition-all">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Teacher Entrance */}
           <Link 

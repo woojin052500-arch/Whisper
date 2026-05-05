@@ -65,6 +65,28 @@ export default function StudentRoom() {
     }
   }, [roomId])
 
+  useEffect(() => {
+    if (room) {
+      // Save to room history for students
+      const historyJson = localStorage.getItem('sgon_student_rooms')
+      let history = historyJson ? JSON.parse(historyJson) : []
+      
+      const newEntry = {
+        id: room.id,
+        name: room.room_name,
+        lastJoined: new Date().toISOString()
+      }
+      
+      // Remove existing entry for the same room
+      history = history.filter((r: any) => r.id !== room.id)
+      // Add to front and limit to 10
+      history.unshift(newEntry)
+      history = history.slice(0, 10)
+      
+      localStorage.setItem('sgon_student_rooms', JSON.stringify(history))
+    }
+  }, [room])
+
   const loadRoom = async () => {
     // Try full ID first
     let roomData = await getRoomById(roomId)
@@ -428,26 +450,26 @@ export default function StudentRoom() {
         </div>
       </nav>
 
-      <dialog id="question_modal" className="modal modal-bottom sm:modal-middle bg-indigo-950/20 backdrop-blur-sm">
-        <div className="modal-box bg-white border border-slate-100 rounded-t-[3rem] sm:rounded-[3rem] p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+      <dialog id="question_modal" className="modal modal-bottom sm:modal-middle bg-indigo-950/40 backdrop-blur-md">
+        <div className="modal-box bg-white border border-slate-100 rounded-t-[3.5rem] sm:rounded-[4rem] p-10 sm:p-14 shadow-2xl relative overflow-hidden max-w-lg">
           {/* Decorative background */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-full blur-3xl -mr-16 -mt-16 opacity-50"></div>
+          <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-50 rounded-full blur-3xl -mr-24 -mt-24 opacity-40"></div>
           
-          <div className="w-12 h-1.5 bg-slate-100 rounded-full mx-auto mb-10 sm:hidden"></div>
+          <div className="w-16 h-1.5 bg-slate-100 rounded-full mx-auto mb-12 sm:hidden"></div>
           
-          <div className="text-center mb-10">
-            <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg className="w-8 h-8 text-indigo-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+          <div className="text-center mb-12 relative z-10">
+            <div className="w-20 h-20 bg-indigo-50 rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-sm transform -rotate-3">
+              <svg className="w-10 h-10 text-indigo-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
               </svg>
             </div>
-            <h3 className="text-3xl font-bold text-indigo-950 mb-2 tracking-tight">소곤거리기</h3>
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">익명으로 질문을 남겨보세요</p>
+            <h3 className="text-4xl font-bold text-indigo-950 mb-3 tracking-tight">소곤거리기</h3>
+            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em] ml-1">익명으로 질문을 남겨보세요</p>
           </div>
           
-          <div className="space-y-8 relative z-10">
+          <div className="space-y-10 relative z-10">
             <textarea
-              className="w-full h-40 bg-slate-50 border border-slate-100 text-indigo-950 p-6 rounded-3xl focus:outline-none focus:ring-4 focus:ring-indigo-950/5 transition-all font-bold placeholder:text-slate-200 resize-none text-lg leading-relaxed shadow-inner"
+              className="w-full h-48 bg-slate-50 border border-slate-100 text-indigo-950 p-8 rounded-[2.5rem] focus:outline-none focus:ring-4 focus:ring-indigo-950/5 transition-all font-bold placeholder:text-slate-200 resize-none text-xl leading-relaxed shadow-inner"
               placeholder="궁금한 내용을 입력하세요..."
               value={questionText}
               onChange={(e) => setQuestionText(e.target.value)}
@@ -455,12 +477,12 @@ export default function StudentRoom() {
             
             <div className="flex gap-4">
               <form method="dialog" className="flex-1">
-                <button className="w-full py-5 bg-slate-50 text-slate-400 font-bold rounded-2xl active:scale-95 transition-all text-sm uppercase tracking-widest">취소</button>
+                <button className="w-full py-6 bg-slate-100 text-slate-400 font-bold rounded-[1.5rem] active:scale-95 transition-all text-xs uppercase tracking-widest">취소</button>
               </form>
               <button
                 onClick={handleSubmitQuestion}
                 disabled={isSubmitting || !questionText.trim()}
-                className="flex-[2] py-5 bg-indigo-950 text-white font-bold rounded-2xl shadow-lg shadow-indigo-900/20 active:scale-95 transition-all disabled:opacity-30 text-sm uppercase tracking-widest"
+                className="flex-[2] py-6 bg-indigo-950 text-white font-bold rounded-[1.5rem] shadow-xl shadow-indigo-900/20 active:scale-95 transition-all disabled:opacity-30 text-xs uppercase tracking-widest"
               >
                 {isSubmitting ? '전송 중...' : '질문 보내기'}
               </button>
