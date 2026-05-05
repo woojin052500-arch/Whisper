@@ -199,54 +199,45 @@ export default function TeacherDashboard() {
   const roomUrl = room ? `${window.location.origin}/student/${room.id}` : ''
 
   // Show loading while checking auth
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-full h-full pointer-events-none opacity-20">
-          <div className="absolute top-[-20%] right-[-10%] w-[80%] h-[80%] bg-blue-600 rounded-full blur-[120px] animate-pulse"></div>
-        </div>
-        <div className="relative z-10 text-center">
-          <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full mx-auto mb-6 animate-spin"></div>
-          <h2 className="text-3xl font-bold text-white tracking-tight mb-2">sgon</h2>
-          <p className="text-slate-400 font-bold text-xs tracking-widest uppercase">인증 중...</p>
-        </div>
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 relative overflow-hidden font-sans">
+      <div className="relative z-10 text-center">
+        <div className="w-12 h-12 border-4 border-slate-100 border-t-indigo-950 rounded-full mx-auto mb-6 animate-spin"></div>
+        <h2 className="text-3xl font-bold text-indigo-950 tracking-tight mb-2">sgon</h2>
+        <p className="text-slate-400 font-bold text-xs tracking-widest uppercase">인증 중...</p>
       </div>
-    )
-  }
+    </div>
 
   // Redirect to sign in if not authenticated
   if (!session) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 relative overflow-hidden">
-        <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-indigo-600/10 rounded-full blur-[120px] animate-pulse"></div>
-        
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 relative overflow-hidden font-sans">
         <div className="w-full max-w-sm relative z-10">
           <div className="text-center mb-12">
-            <h1 className="text-6xl font-bold text-white mb-2 tracking-tight">sgon</h1>
+            <h1 className="text-6xl font-bold text-indigo-950 mb-2 tracking-tight">sgon</h1>
             <p className="text-slate-400 font-bold tracking-widest uppercase text-[10px] ml-1">선생님 대시보드</p>
           </div>
 
-          <div className="bg-slate-900/40 backdrop-blur-3xl p-6 sm:p-10 rounded-[2.5rem] sm:rounded-[3.5rem] border border-white/5 shadow-3xl space-y-8">
+          <div className="bg-white p-6 sm:p-10 rounded-[2.5rem] sm:rounded-[3.5rem] border border-slate-200 shadow-xl space-y-8">
             <div className="text-center space-y-2">
-              <h2 className="text-2xl font-black text-white tracking-tight">선생님 로그인</h2>
+              <h2 className="text-2xl font-bold text-slate-800 tracking-tight">선생님 로그인</h2>
               <p className="text-slate-500 font-medium text-sm leading-relaxed">구글 계정으로 간편하게 시작하고<br/>수업의 품격을 높여보세요.</p>
             </div>
 
             <button
               onClick={() => signIn('google', { callbackUrl: '/teacher' })}
-              className="w-full py-5 bg-white text-slate-950 font-black rounded-2xl shadow-2xl active:scale-[0.98] transition-all flex items-center justify-center gap-3 text-lg"
+              className="w-full py-5 bg-indigo-950 text-white font-bold rounded-2xl shadow-lg shadow-indigo-900/10 active:scale-[0.98] transition-all flex items-center justify-center gap-3 text-lg"
             >
               <svg className="w-6 h-6" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                <path fill="#ffffff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#ffffff" opacity="0.8" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#ffffff" opacity="0.6" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#ffffff" opacity="0.4" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
               </svg>
               Google로 로그인
             </button>
 
-            <div className="p-4 bg-blue-500/5 border border-blue-500/10 rounded-2xl">
-              <p className="text-blue-400 text-[11px] font-bold text-center leading-relaxed">
+            <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl">
+              <p className="text-slate-400 text-[11px] font-bold text-center leading-relaxed">
                 계정 보안을 위해 공식 Google 인증을 사용합니다.
               </p>
             </div>
@@ -259,9 +250,9 @@ export default function TeacherDashboard() {
   // Admin dashboard
   if (session?.user?.email === 'woojin052501@gmail.com' && !room) {
     return (
-      <div className="min-h-screen bg-slate-950 text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-full h-full pointer-events-none opacity-10">
-          <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-red-600 rounded-full blur-[120px]"></div>
+      <div className="min-h-screen bg-white text-slate-900 relative overflow-hidden font-sans">
+        <div className="absolute top-0 right-0 w-full h-full pointer-events-none opacity-5">
+          <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-indigo-500 rounded-full blur-[120px]"></div>
         </div>
 
         <div className="max-w-6xl mx-auto px-6 py-12 relative z-10">
@@ -410,14 +401,9 @@ export default function TeacherDashboard() {
                   {isLoading ? '생성 중...' : '수업 시작하기'}
                 </button>
 
-                <div className="p-6 bg-slate-950/50 rounded-[2rem] border border-white/5">
+                <div className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100">
                   <div className="flex gap-4">
-                    <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center shrink-0">
-                      <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <p className="text-slate-500 text-xs font-medium leading-relaxed">수업방을 생성하면 고유 코드가 발급됩니다. 학생들은 sgon 웹사이트에서 코드만 입력하면 즉시 참여할 수 있습니다.</p>
+                    <p className="text-slate-400 text-xs font-medium leading-relaxed">수업방을 생성하면 고유 코드가 발급됩니다. 학생들은 sgon 웹사이트에서 코드만 입력하면 즉시 참여할 수 있습니다.</p>
                   </div>
                 </div>
               </div>
@@ -427,26 +413,20 @@ export default function TeacherDashboard() {
 
         {/* Payment Popup */}
         {showPaymentPopup && (
-          <div className="fixed inset-0 bg-slate-950/90 backdrop-blur-2xl flex items-center justify-center p-6 z-[100]">
-            <div className="bg-slate-900 border border-white/10 rounded-[2.5rem] sm:rounded-[3.5rem] p-8 sm:p-12 max-w-lg w-full shadow-3xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-8 opacity-5">
-                <svg className="w-40 h-40 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              </div>
-
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xl flex items-center justify-center p-6 z-[100]">
+            <div className="bg-white border border-slate-200 rounded-[3rem] p-8 sm:p-12 max-w-lg w-full shadow-2xl relative overflow-hidden">
               <div className="text-center mb-10 relative z-10">
-                <div className="w-16 h-16 bg-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-amber-500/20">
+                <div className="w-16 h-16 bg-indigo-950 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-indigo-900/20">
                   <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-7.714 2.143L11 21l-2.286-6.857L1 12l7.714-2.143L11 3z" />
                   </svg>
                 </div>
-                <h2 className="text-3xl font-bold text-white tracking-tight mb-2">sgon 프리미엄</h2>
-                <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">모든 기능을 무제한으로 이용하세요</p>
+                <h2 className="text-3xl font-bold text-indigo-950 tracking-tight mb-2">sgon 프리미엄</h2>
+                <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">모든 기능을 무제한으로 이용하세요</p>
               </div>
 
               <div className="space-y-6 relative z-10">
-                <div className="p-8 bg-gradient-to-br from-amber-500 to-orange-600 rounded-[2.5rem] text-white shadow-xl shadow-amber-500/20">
+                <div className="p-8 bg-indigo-950 rounded-[2.5rem] text-white shadow-xl shadow-indigo-900/20">
                   <div className="flex justify-between items-center mb-1">
                     <span className="font-bold tracking-widest uppercase text-xs opacity-70">월간 구독</span>
                     <span className="font-bold text-3xl tracking-tight">990원</span>
@@ -454,26 +434,31 @@ export default function TeacherDashboard() {
                   <p className="text-xs font-bold opacity-80 uppercase tracking-widest">모든 수업 기능 잠금 해제</p>
                 </div>
 
-                <div className="bg-slate-950/50 rounded-[2.5rem] p-8 border border-white/5 space-y-4">
+                <div className="bg-slate-50 rounded-[2.5rem] p-8 border border-slate-100 space-y-4">
                   <div className="flex justify-between">
-                    <span className="text-slate-600 font-bold uppercase text-[10px] tracking-widest">입금 계좌</span>
-                    <span className="text-white font-bold text-sm">NH농협 3516376760453</span>
+                    <span className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">입금 계좌</span>
+                    <span className="text-indigo-950 font-bold text-sm">NH농협 3516376760453</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-600 font-bold uppercase text-[10px] tracking-widest">예금주</span>
-                    <span className="text-white font-bold text-sm">WJedulab</span>
+                    <span className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">예금주</span>
+                    <span className="text-indigo-950 font-bold text-sm">WJedulab</span>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
                   <button onClick={() => {
                     navigator.clipboard.writeText('NH농협 3516376760453')
-                    alert('Copied to clipboard!')
-                  }} className="flex-1 py-5 bg-white/5 border border-white/10 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white/10 transition-all">Copy Account</button>
-                  <button onClick={() => window.open('https://open.kakao.com/o/g3INItti', '_blank')} className="flex-1 py-5 bg-[#FEE500] text-slate-900 rounded-2xl font-black text-xs uppercase tracking-widest hover:brightness-110 transition-all">Kakao Chat</button>
+                    alert('계좌번호가 복사되었습니다.')
+                  }} className="flex-1 py-5 bg-slate-50 border border-slate-200 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-slate-100 transition-all text-slate-600">계좌 복사</button>
+                  <button onClick={async () => {
+                    if (session?.user?.email) {
+                      await requestPaymentVerification(session.user.email)
+                    }
+                    window.open('https://open.kakao.com/o/g3INItti', '_blank')
+                  }} className="flex-1 py-5 bg-[#FEE500] text-slate-900 rounded-2xl font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all">카톡 문의</button>
                 </div>
 
-                <button onClick={() => setShowPaymentPopup(false)} className="w-full py-4 sm:py-5 text-slate-600 font-black text-[10px] sm:text-xs uppercase tracking-[0.3em] hover:text-slate-400 transition-all">Maybe Later</button>
+                <button onClick={() => setShowPaymentPopup(false)} className="w-full py-4 sm:py-5 text-slate-400 font-bold text-[10px] sm:text-xs uppercase tracking-[0.3em] hover:text-slate-600 transition-all">나중에 하기</button>
               </div>
             </div>
           </div>
@@ -484,19 +469,17 @@ export default function TeacherDashboard() {
 
   // Main teacher dashboard with room
   return (
-    <div className="min-h-screen bg-slate-950 text-white relative flex flex-col">
-      {/* Dynamic Backgrounds */}
-      <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
-        <div className="absolute top-[-20%] right-[-10%] w-[80%] h-[80%] bg-blue-600/5 rounded-full blur-[150px]"></div>
-        <div className="absolute bottom-[-20%] left-[-10%] w-[80%] h-[80%] bg-indigo-600/5 rounded-full blur-[150px]"></div>
+    <div className="min-h-screen bg-white text-slate-900 relative flex flex-col font-sans">
+      {/* Background elements */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-blue-50/50 rounded-full blur-[120px] opacity-20"></div>
       </div>
 
       {/* Top Header */}
-      {/* Top Header */}
-      <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-3xl border-b border-white/5 px-4 sm:px-8 py-3 sm:py-4 flex items-center justify-between">
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-3xl border-b border-slate-100 px-4 sm:px-8 py-3 sm:py-4 flex items-center justify-between">
         <div className="flex items-center gap-3 sm:gap-4">
-          <button onClick={() => setRoom(null)} className="w-10 h-10 sm:w-12 sm:h-12 bg-white/5 rounded-xl flex items-center justify-center hover:bg-white/10 transition-all active:scale-90">
-            <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button onClick={() => setRoom(null)} className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-50 rounded-xl flex items-center justify-center hover:bg-slate-100 transition-all active:scale-90 border border-slate-100">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
@@ -583,20 +566,19 @@ export default function TeacherDashboard() {
           </section>
         </aside>
 
-        {/* Right Column - Questions Feed */}
         <section className="lg:col-span-8 space-y-6 sm:space-y-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-2 sm:px-4">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight uppercase">질문 목록</h2>
-            <div className="flex bg-white/5 rounded-2xl p-1.5 border border-white/5 w-full sm:w-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight uppercase text-indigo-950">질문 목록</h2>
+            <div className="flex bg-slate-50 rounded-2xl p-1.5 border border-slate-100 w-full sm:w-auto">
               <button 
                 onClick={() => setSortBy('latest')}
-                className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 rounded-xl text-[9px] sm:text-[10px] font-bold uppercase tracking-widest transition-all ${sortBy === 'latest' ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-white'}`}
+                className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 rounded-xl text-[9px] sm:text-[10px] font-bold uppercase tracking-widest transition-all ${sortBy === 'latest' ? 'bg-indigo-950 text-white shadow-md' : 'text-slate-400 hover:text-slate-600'}`}
               >
                 최신순
               </button>
               <button 
                 onClick={() => setSortBy('likes')}
-                className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 rounded-xl text-[9px] sm:text-[10px] font-bold uppercase tracking-widest transition-all ${sortBy === 'likes' ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-white'}`}
+                className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 rounded-xl text-[9px] sm:text-[10px] font-bold uppercase tracking-widest transition-all ${sortBy === 'likes' ? 'bg-indigo-950 text-white shadow-md' : 'text-slate-400 hover:text-slate-600'}`}
               >
                 인기순
               </button>
@@ -655,7 +637,7 @@ export default function TeacherDashboard() {
                     <div className="flex flex-col gap-3 shrink-0">
                       <button 
                         onClick={() => setSelectedQuestion(q)}
-                        className="w-14 h-14 bg-white/5 hover:bg-blue-500 text-slate-400 hover:text-white rounded-2xl flex items-center justify-center transition-all shadow-lg active:scale-90"
+                        className="w-14 h-14 bg-slate-50 hover:bg-indigo-950 text-slate-400 hover:text-white rounded-2xl flex items-center justify-center transition-all border border-slate-100 shadow-sm"
                       >
                         <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -664,7 +646,7 @@ export default function TeacherDashboard() {
                       {q.status !== 'answered' && (
                         <button 
                           onClick={() => handleMarkAnswered(q.id)}
-                          className="w-14 h-14 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-white rounded-2xl flex items-center justify-center transition-all shadow-lg active:scale-90 border border-emerald-500/20 hover:border-transparent"
+                          className="w-14 h-14 bg-emerald-50 hover:bg-emerald-600 text-emerald-600 hover:text-white rounded-2xl flex items-center justify-center transition-all border border-emerald-100 shadow-sm"
                         >
                           <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
@@ -680,55 +662,54 @@ export default function TeacherDashboard() {
         </section>
       </main>
 
-      {/* Reply Modal */}
       {selectedQuestion && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-slate-950/90 backdrop-blur-2xl">
-          <div className="bg-slate-900 border border-white/10 rounded-[2.5rem] sm:rounded-[4rem] p-8 sm:p-12 max-w-2xl w-full shadow-3xl relative overflow-hidden">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-slate-900/60 backdrop-blur-xl">
+          <div className="bg-white border border-slate-200 rounded-[2.5rem] sm:rounded-[3rem] p-8 sm:p-12 max-w-2xl w-full shadow-2xl relative overflow-hidden">
             <div className="flex justify-between items-center mb-10">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <div className="w-10 h-10 bg-indigo-950 rounded-xl flex items-center justify-center">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-black tracking-tight italic uppercase">Reply Thread</h3>
+                <h3 className="text-2xl font-bold tracking-tight text-indigo-950 uppercase">질문 답변</h3>
               </div>
-              <button onClick={() => { setSelectedQuestion(null); setAnswerText(''); }} className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center hover:bg-white/10 transition-all">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button onClick={() => { setSelectedQuestion(null); setAnswerText(''); }} className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center hover:bg-slate-100 transition-all border border-slate-100">
+                <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
             <div className="space-y-10">
-              <div className="p-8 bg-white/5 rounded-[2.5rem] border border-white/5 shadow-inner">
-                <p className="text-[10px] font-black text-slate-600 uppercase tracking-[0.3em] mb-3">Student Question</p>
-                <p className="text-white font-bold text-xl leading-relaxed">{selectedQuestion.content}</p>
+              <div className="p-8 bg-slate-50 rounded-[2rem] border border-slate-100 shadow-sm">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-3">학생 질문</p>
+                <p className="text-slate-900 font-bold text-xl leading-relaxed">{selectedQuestion.content}</p>
               </div>
 
               <div className="space-y-4">
-                <label className="block text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] ml-2 italic">Your Official Response</label>
+                <label className="block text-[10px] font-bold text-indigo-900 uppercase tracking-[0.3em] ml-2">선생님 답변</label>
                 <textarea
                   value={answerText}
                   onChange={(e) => setAnswerText(e.target.value)}
                   placeholder="답변 내용을 입력하세요..."
-                  className="w-full h-48 bg-slate-950/50 border border-white/5 text-white p-8 rounded-[2.5rem] focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all font-bold placeholder:text-slate-800 text-lg leading-relaxed shadow-inner resize-none"
+                  className="w-full h-48 bg-white border border-slate-200 text-slate-900 p-8 rounded-[2rem] focus:outline-none focus:ring-4 focus:ring-indigo-950/5 transition-all font-bold placeholder:text-slate-200 text-lg leading-relaxed shadow-sm resize-none"
                 />
               </div>
 
               <div className="flex gap-4">
                 <button 
                   onClick={() => { setSelectedQuestion(null); setAnswerText(''); }} 
-                  className="flex-1 py-6 bg-slate-800 text-slate-500 font-black rounded-3xl active:scale-95 transition-all text-lg tracking-tight"
+                  className="flex-1 py-6 bg-slate-100 text-slate-400 font-bold rounded-2xl active:scale-95 transition-all text-lg"
                 >
-                  Cancel
+                  취소
                 </button>
                 <button
                   onClick={handleAnswerQuestion}
                   disabled={!answerText.trim() || isSubmitting}
-                  className="flex-[2] py-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-black rounded-3xl shadow-2xl shadow-blue-500/40 active:scale-95 transition-all disabled:opacity-30 text-lg tracking-tight"
+                  className="flex-[2] py-6 bg-indigo-950 text-white font-bold rounded-2xl shadow-xl shadow-indigo-900/10 active:scale-95 transition-all disabled:opacity-30 text-lg"
                 >
-                  {isSubmitting ? 'Posting...' : 'Post Reply'}
+                  {isSubmitting ? '전송 중...' : '답변 등록'}
                 </button>
               </div>
             </div>

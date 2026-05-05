@@ -7,18 +7,18 @@ export default function Home() {
   const [roomCode, setRoomCode] = useState('')
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white relative overflow-hidden flex flex-col items-center justify-center font-sans">
+    <div className="min-h-screen bg-white text-slate-900 relative overflow-hidden flex flex-col items-center justify-center font-sans">
       {/* Premium Background Elements */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute top-[-10%] right-[-10%] w-[70%] h-[70%] bg-blue-600/10 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-[-10%] left-[-10%] w-[70%] h-[70%] bg-indigo-600/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-[-10%] right-[-10%] w-[70%] h-[70%] bg-blue-50/50 rounded-full blur-[120px] opacity-20"></div>
+        <div className="absolute bottom-[-10%] left-[-10%] w-[70%] h-[70%] bg-indigo-50/50 rounded-full blur-[120px] opacity-20"></div>
       </div>
 
       <div className="container max-w-lg mx-auto px-6 py-12 relative z-10 flex flex-col min-h-screen">
         {/* Logo / Header */}
         <header className="flex flex-col items-center mb-12 sm:mb-16 pt-8">
-          <h1 className="text-6xl sm:text-7xl font-bold tracking-tight mb-4 bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent animate-in slide-in-from-bottom-4 duration-1000">sgon</h1>
-          <p className="text-slate-400 font-bold uppercase tracking-[0.4em] text-[9px] sm:text-[10px] bg-white/5 px-5 py-2.5 rounded-full border border-white/5 animate-in fade-in duration-1000 delay-300">
+          <h1 className="text-6xl sm:text-7xl font-bold tracking-tight mb-4 text-slate-900">sgon</h1>
+          <p className="text-slate-500 font-bold uppercase tracking-[0.4em] text-[9px] sm:text-[10px] bg-slate-100 px-5 py-2.5 rounded-full border border-slate-200">
             실시간 수업 소통 플랫폼
           </p>
         </header>
@@ -26,33 +26,33 @@ export default function Home() {
         {/* Main Selection Area */}
         <div className="flex-1 space-y-8 flex flex-col justify-center pb-20">
           <div className="text-center space-y-4 mb-4">
-            <h2 className="text-2xl font-bold leading-tight tracking-tight">
+            <h2 className="text-2xl font-bold leading-tight tracking-tight text-slate-800">
               가장 조용한 목소리가 만드는<br />
-              <span className="text-blue-500">가장 뜨거운 수업</span>
+              <span className="text-indigo-900">가장 뜨거운 수업</span>
             </h2>
             <p className="text-slate-500 font-medium text-sm">부담 없는 익명 질문으로 소통의 벽을 허무세요.</p>
           </div>
 
           {/* Student Entrance */}
-          <div className="bg-slate-900/60 backdrop-blur-3xl p-8 rounded-[3rem] border border-white/10 shadow-3xl space-y-6">
+          <div className="bg-white p-8 rounded-[3rem] border border-slate-200 shadow-xl space-y-6">
             <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-blue-400 uppercase tracking-widest ml-2 text-center">수업 입장</label>
+              <label className="block text-[10px] font-bold text-indigo-900 uppercase tracking-widest ml-2 text-center">수업 입장</label>
               <input
                 type="text"
                 placeholder="수업 코드를 입력하세요 (6자리)"
                 value={roomCode}
                 onChange={(e) => setRoomCode(e.target.value)}
                 maxLength={6}
-                className="w-full px-6 py-5 bg-white/5 border border-white/10 text-white rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all font-bold placeholder:text-slate-700 text-lg text-center tracking-widest uppercase"
+                className="w-full px-6 py-5 bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-900/10 transition-all font-bold placeholder:text-slate-300 text-lg text-center tracking-widest uppercase"
               />
             </div>
             
             <Link 
               href={roomCode ? `/student/${roomCode}` : '#'}
-              className={`w-full py-6 flex items-center justify-center gap-3 font-black rounded-3xl transition-all text-lg shadow-2xl ${
+              className={`w-full py-6 flex items-center justify-center gap-3 font-bold rounded-3xl transition-all text-lg shadow-xl ${
                 roomCode 
-                  ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-blue-500/40 active:scale-[0.98]' 
-                  : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                  ? 'bg-indigo-950 text-white shadow-indigo-900/20 active:scale-[0.98]' 
+                  : 'bg-slate-100 text-slate-300 cursor-not-allowed'
               }`}
               onClick={(e) => {
                 if (!roomCode) e.preventDefault()
@@ -70,21 +70,20 @@ export default function Home() {
             href="/teacher"
             className="group relative block"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-[2.5rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <div className="relative bg-white/5 hover:bg-white/10 border border-white/10 p-8 rounded-[2.5rem] flex items-center justify-between transition-all group-active:scale-[0.98]">
+            <div className="relative bg-white hover:bg-slate-50 border border-slate-200 p-8 rounded-[2.5rem] flex items-center justify-between transition-all group-active:scale-[0.98] shadow-lg">
               <div className="flex items-center gap-5">
-                <div className="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center border border-emerald-500/20">
-                  <svg className="w-7 h-7 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center border border-slate-200">
+                  <svg className="w-7 h-7 text-indigo-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xl font-black tracking-tight">선생님 전용</h3>
-                  <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-0.5">Teacher Dashboard</p>
+                  <h3 className="text-xl font-bold tracking-tight text-slate-900">선생님 전용</h3>
+                  <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-0.5">Teacher Dashboard</p>
                 </div>
               </div>
-              <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/5 group-hover:translate-x-2 transition-transform">
-                <svg className="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center border border-slate-200 group-hover:translate-x-2 transition-transform">
+                <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                 </svg>
               </div>
@@ -96,21 +95,21 @@ export default function Home() {
         <footer className="mt-auto pt-10 text-center space-y-4">
           <div className="flex justify-center gap-8">
             <div className="text-center">
-              <p className="text-white font-black text-xl italic">100%</p>
-              <p className="text-slate-600 font-bold uppercase text-[9px] tracking-widest mt-1">Anonymous</p>
+              <p className="text-indigo-900 font-bold text-xl">100%</p>
+              <p className="text-slate-400 font-bold uppercase text-[9px] tracking-widest mt-1">Anonymous</p>
             </div>
-            <div className="w-[1px] h-8 bg-white/5"></div>
+            <div className="w-[1px] h-8 bg-slate-200"></div>
             <div className="text-center">
-              <p className="text-white font-black text-xl italic">Real</p>
-              <p className="text-slate-600 font-bold uppercase text-[9px] tracking-widest mt-1">Live Sync</p>
+              <p className="text-indigo-900 font-bold text-xl">Real</p>
+              <p className="text-slate-400 font-bold uppercase text-[9px] tracking-widest mt-1">Live Sync</p>
             </div>
-            <div className="w-[1px] h-8 bg-white/5"></div>
+            <div className="w-[1px] h-8 bg-slate-200"></div>
             <div className="text-center">
-              <p className="text-white font-black text-xl italic">Free</p>
-              <p className="text-slate-600 font-bold uppercase text-[9px] tracking-widest mt-1">For Students</p>
+              <p className="text-indigo-900 font-bold text-xl">Free</p>
+              <p className="text-slate-400 font-bold uppercase text-[9px] tracking-widest mt-1">For Students</p>
             </div>
           </div>
-          <p className="text-slate-700 font-bold text-[9px] uppercase tracking-widest">© 2026 WJedulab. All rights reserved.</p>
+          <p className="text-slate-300 font-bold text-[9px] uppercase tracking-widest">© 2026 WJedulab. All rights reserved.</p>
         </footer>
       </div>
 
