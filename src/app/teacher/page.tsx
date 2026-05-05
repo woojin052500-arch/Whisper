@@ -619,15 +619,35 @@ export default function TeacherDashboard() {
             <div>
               <h3 className="text-[10px] font-bold text-indigo-950 uppercase tracking-[0.3em] mb-4 ml-1">공지사항</h3>
               <div className="space-y-4">
-                <textarea
-                  value={noticeText}
-                  onChange={(e) => setNoticeText(e.target.value)}
-                  placeholder="공지사항을 입력하세요..."
-                  className="w-full h-24 sm:h-32 bg-slate-50 border border-slate-100 text-slate-900 p-4 sm:p-5 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-950/5 transition-all font-bold placeholder:text-slate-200 text-xs sm:text-sm resize-none shadow-sm"
-                />
+                <div className="relative group">
+                  <textarea
+                    value={noticeText}
+                    onChange={(e) => setNoticeText(e.target.value)}
+                    placeholder="공지사항을 입력하세요..."
+                    className="w-full h-24 sm:h-32 bg-slate-50 border border-slate-100 text-slate-900 p-4 sm:p-5 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-950/5 transition-all font-bold placeholder:text-slate-200 text-xs sm:text-sm resize-none shadow-sm"
+                  />
+                  {room?.notice && (
+                    <button 
+                      onClick={async () => {
+                        if (confirm('공지를 삭제하시겠습니까?')) {
+                          const success = await updateRoomNotice(room.id, '')
+                          if (success) {
+                            setNoticeText('')
+                            setRoom({ ...room, notice: '' })
+                          }
+                        }
+                      }}
+                      className="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur-sm text-slate-400 hover:text-red-500 rounded-xl border border-slate-100 shadow-sm transition-all"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
                 <button
                   onClick={handleUpdateNotice}
-                  disabled={isUpdatingNotice || !noticeText.trim()}
+                  disabled={isUpdatingNotice || noticeText.trim() === (room?.notice || '')}
                   className={`w-full py-5 rounded-2xl font-bold shadow-lg transition-all text-xs uppercase tracking-widest ${noticeSuccess ? 'bg-emerald-500 text-white shadow-emerald-500/10' : 'bg-indigo-950 text-white shadow-indigo-900/10 active:scale-95'}`}
                 >
                   {isUpdatingNotice ? '업데이트 중...' : (noticeSuccess ? '공지 게시 완료!' : '공지 게시하기')}

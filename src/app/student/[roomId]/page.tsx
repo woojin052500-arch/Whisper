@@ -332,7 +332,7 @@ export default function StudentRoom() {
                   </div>
                   <div className="flex-1">
                     <p className="text-indigo-950 font-bold leading-relaxed text-lg italic">
-                      {realtimeRoom?.notice || room?.notice || '현재 게시된 공지사항이 없습니다.'}
+                      {realtimeRoom?.notice || room?.notice || (isLoading ? '공지를 불러오는 중...' : '현재 게시된 공지사항이 없습니다.')}
                     </p>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-4">
                       최종 업데이트: {new Date(realtimeRoom?.updated_at || room?.updated_at || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -368,7 +368,7 @@ export default function StudentRoom() {
             <div className="py-16 sm:py-24 text-center bg-slate-50 border border-dashed border-slate-200 rounded-[2rem] sm:rounded-[3rem]">
               <p className="text-slate-400 font-bold mb-8">궁금한 점을 소곤소곤 물어보세요.</p>
               <button 
-                onClick={() => (document.getElementById('question_modal') as any).showModal()}
+                onClick={() => setIsQuestionModalOpen(true)}
                 className="px-10 py-5 bg-indigo-950 text-white font-bold rounded-2xl shadow-lg shadow-indigo-900/10 transition-all active:scale-95"
               >
                 첫 질문하기

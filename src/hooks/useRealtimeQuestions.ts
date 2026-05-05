@@ -125,10 +125,14 @@ export const useRealtimeRoom = (roomId: string, initialRoom: Room | null) => {
         },
         (payload) => {
           console.log('Room update received:', payload)
-          setRoom(payload.new as Room)
+          if (payload.new) {
+            setRoom(payload.new as Room)
+          }
         }
       )
-      .subscribe()
+      .subscribe((status) => {
+        console.log(`Subscription status for room_${roomId}:`, status)
+      })
 
     return () => {
       subscription.unsubscribe()
