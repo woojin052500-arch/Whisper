@@ -200,6 +200,7 @@ export const getRoomByCode = async (code: string): Promise<Room | null> => {
 // Update room notice
 export const updateRoomNotice = async (roomId: string, notice: string): Promise<boolean> => {
   try {
+    console.log('Updating notice for room:', roomId, 'with text:', notice)
     const { error } = await supabase
       .from('rooms')
       .update({ 
@@ -208,10 +209,13 @@ export const updateRoomNotice = async (roomId: string, notice: string): Promise<
       })
       .eq('id', roomId)
 
-    if (error) throw error
+    if (error) {
+      console.error('Supabase error updating notice:', error)
+      throw error
+    }
     return true
   } catch (error) {
-    console.error('Error updating room notice:', error)
+    console.error('Error in updateRoomNotice:', error)
     return false
   }
 }

@@ -75,27 +75,45 @@ export default function Home() {
 
           {/* Recent Rooms Section */}
           {recentRooms.length > 0 && (
-            <div className="space-y-4">
-              <label className="block text-[10px] font-bold text-indigo-950 uppercase tracking-[0.3em] ml-2">최근 참여한 수업</label>
-              <div className="grid grid-cols-1 gap-3">
-                {recentRooms.slice(0, 3).map((room) => (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between px-2">
+                <h3 className="text-sm font-bold text-slate-800 tracking-tight">내가 참여중인 수업</h3>
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full uppercase tracking-widest">{recentRooms.length} Rooms</span>
+                  <button 
+                    onClick={() => {
+                      localStorage.removeItem('sgon_student_rooms')
+                      setRecentRooms([])
+                    }}
+                    className="text-[9px] font-bold text-slate-300 hover:text-red-400 uppercase tracking-widest transition-colors"
+                  >
+                    초기화
+                  </button>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-4">
+                {recentRooms.slice(0, 5).map((room) => (
                   <Link 
                     key={room.id}
                     href={`/student/${room.id}`}
-                    className="group bg-white border border-slate-100 p-6 rounded-[2rem] flex items-center justify-between hover:border-indigo-950/20 hover:shadow-lg transition-all active:scale-[0.98]"
+                    className="group bg-white border border-slate-100 p-8 rounded-[2.5rem] flex items-center justify-between hover:border-indigo-950/20 hover:shadow-2xl hover:shadow-indigo-900/5 transition-all active:scale-[0.98] shadow-sm"
                   >
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-950 font-bold text-xs uppercase">
-                        {room.id.slice(-2)}
+                    <div className="flex items-center gap-5">
+                      <div className="w-12 h-12 bg-indigo-950 rounded-2xl flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-indigo-950/20 group-hover:scale-110 transition-transform">
+                        {room.id.slice(0, 2).toUpperCase()}
                       </div>
                       <div>
-                        <h4 className="font-bold text-slate-900 group-hover:text-indigo-950 transition-colors">{room.name}</h4>
-                        <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest mt-0.5">최근 접속: {new Date(room.lastJoined).toLocaleDateString()}</p>
+                        <h4 className="text-lg font-bold text-slate-900 group-hover:text-indigo-950 transition-colors leading-tight">{room.name}</h4>
+                        <div className="flex items-center gap-3 mt-1.5">
+                          <span className="text-[10px] font-bold text-indigo-900/40 uppercase tracking-widest">Code: {room.id}</span>
+                          <span className="w-1 h-1 bg-slate-200 rounded-full"></span>
+                          <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">{new Date(room.lastJoined).toLocaleDateString()}</p>
+                        </div>
                       </div>
                     </div>
-                    <div className="w-8 h-8 bg-slate-50 rounded-full flex items-center justify-center group-hover:bg-indigo-950 group-hover:text-white transition-all">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                    <div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center group-hover:bg-indigo-950 group-hover:text-white transition-all shadow-sm">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                       </svg>
                     </div>
                   </Link>

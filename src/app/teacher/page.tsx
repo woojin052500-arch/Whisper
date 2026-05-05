@@ -42,8 +42,9 @@ export default function TeacherDashboard() {
   const realtimeRoom = useRealtimeRoom(room?.id || '', room)
 
   useEffect(() => {
+    // Only set if user is not currently typing
     if (realtimeRoom?.notice) {
-      setNoticeText(realtimeRoom.notice)
+      setNoticeText(prev => prev === '' ? realtimeRoom.notice! : prev)
     }
   }, [realtimeRoom])
 
