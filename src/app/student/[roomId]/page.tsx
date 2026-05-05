@@ -380,52 +380,69 @@ export default function StudentRoom() {
       </main>
 
       {/* Premium Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 w-full z-40 px-4 sm:px-6 py-6 sm:py-8 bg-gradient-to-t from-white via-white/90 to-transparent">
-        <div className="max-w-md mx-auto bg-white/80 backdrop-blur-3xl border border-slate-200 rounded-[2.5rem] p-2 flex items-center justify-around shadow-2xl shadow-slate-200/50">
-          <button className="flex-1 py-4 flex flex-col items-center gap-1.5 group transition-all">
-            <svg className="w-6 h-6 text-indigo-950" fill="currentColor" viewBox="0 0 20 20">
+      <nav className="fixed bottom-0 left-0 w-full z-40 px-4 sm:px-6 py-6 sm:py-10 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none">
+        <div className="max-w-xs mx-auto bg-white/90 backdrop-blur-2xl border border-slate-200 rounded-[3rem] p-2 flex items-center shadow-2xl shadow-indigo-900/10 pointer-events-auto">
+          <button className="flex-1 py-4 flex flex-col items-center gap-1 group transition-all">
+            <svg className="w-5 h-5 text-indigo-950" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.879.879a1 1 0 001.414-1.414l-7-7z" />
             </svg>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-950">Home</span>
+            <span className="text-[9px] font-bold uppercase tracking-widest text-indigo-950">Home</span>
           </button>
+          
           <button 
             onClick={() => (document.getElementById('question_modal') as any).showModal()}
-            className="flex-1 py-4 flex flex-col items-center gap-1.5 group transition-all"
+            className="w-16 h-16 bg-indigo-950 rounded-full flex items-center justify-center shadow-lg shadow-indigo-900/40 -mt-12 border-4 border-white active:scale-90 transition-all"
           >
-            <div className="w-10 h-10 bg-slate-50 rounded-2xl flex items-center justify-center group-hover:bg-slate-100 transition-all border border-slate-100">
-              <svg className="w-6 h-6 text-slate-400 group-hover:text-indigo-950 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-              </svg>
-            </div>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 group-hover:text-indigo-950 transition-colors">sgon</span>
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
+
+          <button className="flex-1 py-4 flex flex-col items-center gap-1 group transition-all opacity-30">
+            <svg className="w-5 h-5 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+              <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
+            </svg>
+            <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400">Task</span>
           </button>
         </div>
       </nav>
 
-      <dialog id="question_modal" className="modal modal-bottom sm:modal-middle bg-slate-900/60 backdrop-blur-md">
-        <div className="modal-box bg-white border border-slate-200 rounded-t-[3rem] sm:rounded-[3rem] p-8 sm:p-12 shadow-2xl">
-          <div className="w-16 h-1.5 bg-slate-100 rounded-full mx-auto mb-10 sm:hidden"></div>
-          <h3 className="text-2xl sm:text-3xl font-bold text-indigo-950 mb-3 tracking-tight text-center">소곤거리기</h3>
-          <p className="text-slate-400 text-[11px] sm:text-sm font-bold mb-10 text-center uppercase tracking-widest leading-relaxed">익명으로 안전하고 조심스럽게.<br/>선생님께만 들리는 소중한 질문.</p>
+      <dialog id="question_modal" className="modal modal-bottom sm:modal-middle bg-indigo-950/20 backdrop-blur-sm">
+        <div className="modal-box bg-white border border-slate-100 rounded-t-[3rem] sm:rounded-[3rem] p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+          {/* Decorative background */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-full blur-3xl -mr-16 -mt-16 opacity-50"></div>
           
-          <div className="space-y-8">
+          <div className="w-12 h-1.5 bg-slate-100 rounded-full mx-auto mb-10 sm:hidden"></div>
+          
+          <div className="text-center mb-10">
+            <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <svg className="w-8 h-8 text-indigo-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+            </div>
+            <h3 className="text-3xl font-bold text-indigo-950 mb-2 tracking-tight">소곤거리기</h3>
+            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">익명으로 질문을 남겨보세요</p>
+          </div>
+          
+          <div className="space-y-8 relative z-10">
             <textarea
-              className="w-full h-48 bg-slate-50 border border-slate-200 text-slate-900 p-7 rounded-[2rem] focus:outline-none focus:ring-4 focus:ring-indigo-950/5 transition-all font-bold placeholder:text-slate-200 resize-none text-lg leading-relaxed shadow-sm"
-              placeholder="궁금한 내용을 편하게 적어주세요..."
+              className="w-full h-40 bg-slate-50 border border-slate-100 text-indigo-950 p-6 rounded-3xl focus:outline-none focus:ring-4 focus:ring-indigo-950/5 transition-all font-bold placeholder:text-slate-200 resize-none text-lg leading-relaxed shadow-inner"
+              placeholder="궁금한 내용을 입력하세요..."
               value={questionText}
               onChange={(e) => setQuestionText(e.target.value)}
             ></textarea>
             
             <div className="flex gap-4">
               <form method="dialog" className="flex-1">
-                <button className="w-full py-6 bg-slate-100 text-slate-400 font-bold rounded-3xl active:scale-95 transition-all text-lg">닫기</button>
+                <button className="w-full py-5 bg-slate-50 text-slate-400 font-bold rounded-2xl active:scale-95 transition-all text-sm uppercase tracking-widest">취소</button>
               </form>
               <button
                 onClick={handleSubmitQuestion}
                 disabled={isSubmitting || !questionText.trim()}
-                className="flex-[2] py-6 bg-indigo-950 text-white font-bold rounded-3xl shadow-xl shadow-indigo-900/10 active:scale-95 transition-all disabled:opacity-30 text-lg"
+                className="flex-[2] py-5 bg-indigo-950 text-white font-bold rounded-2xl shadow-lg shadow-indigo-900/20 active:scale-95 transition-all disabled:opacity-30 text-sm uppercase tracking-widest"
               >
-                {isSubmitting ? '전송 중...' : '질문하기'}
+                {isSubmitting ? '전송 중...' : '질문 보내기'}
               </button>
             </div>
           </div>
