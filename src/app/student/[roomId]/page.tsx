@@ -106,6 +106,24 @@ export default function StudentRoom() {
     setIsLoading(false)
   }
 
+  // Polling fallback for notices (every 5 seconds)
+  useEffect(() => {
+    if (!room?.id) return
+
+    const interval = setInterval(async () => {
+      try {
+        const freshRoom = await getRoomById(room.id)
+        if (freshRoom && freshRoom.notice !== (room?.notice || '')) {
+          setRoom(prev => prev ? { ...prev, notice: freshRoom.notice } : freshRoom)
+        }
+      } catch (e) {
+        // Silent fail
+      }
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [room?.id, room?.notice])
+
   const handleLogin = async () => {
     if (!nickname.trim() || !password.trim()) {
       setError('닉네임과 비밀번호를 모두 입력해주세요.')
@@ -332,8 +350,12 @@ export default function StudentRoom() {
                   </div>
                   <div className="flex-1">
                     <p className="text-indigo-950 font-bold leading-relaxed text-lg italic">
-                      {realtimeRoom?.notice || room?.notice || (isLoading ? '공지를 불러오는 중...' : '현재 게시된 공지사항이 없습니다.')}
+                      {(realtimeRoom?.notice || room?.notice) || (isLoading ? '공지를 불러오는 중...' : '현재 게시된 공지사항이 없습니다.')}
                     </p>
+                    {/* Debug info - only visible in dev if needed, or keep hidden */}
+                    <div className="hidden">
+                      Debug: RT:{realtimeRoom?.notice} Room:{room?.notice}
+                    </div>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-4">
                       최종 업데이트: {new Date(realtimeRoom?.updated_at || room?.updated_at || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
