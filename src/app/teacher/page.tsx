@@ -450,7 +450,7 @@ export default function TeacherDashboard() {
                         onClick={() => window.open('https://open.kakao.com/o/g3INItti', '_blank')}
                         className="w-full py-4 bg-[#FEE500] text-slate-900 rounded-2xl font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all"
                       >
-                        카톡으로 재문의하기
+                        입금자 확인방 가기
                       </button>
                     </div>
                   </div>
@@ -494,7 +494,7 @@ export default function TeacherDashboard() {
                       setIsRequestingPayment(false)
                     }} className="flex-1 py-5 bg-[#FEE500] text-slate-900 rounded-2xl font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all disabled:opacity-50"
                   >
-                    {isRequestingPayment ? '처리 중...' : '카톡 문의'}
+                    {isRequestingPayment ? '처리 중...' : '입금자 확인방 입장'}
                   </button>
                 </div>
 
