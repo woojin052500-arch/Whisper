@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "귓속말 (Whisper) - WJedulab",
-  description: "가장 조용한 목소리가 만드는 가장 뜨거운 수업",
+  title: "sgon - WJedulab",
+  description: "가장 조용한 목소리가 만드는 가장 뜨거운 수업, sgon",
 };
 
 export default function RootLayout({
