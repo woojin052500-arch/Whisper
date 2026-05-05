@@ -201,13 +201,8 @@ export default function StudentRoom() {
         
         <div className="w-full max-w-sm relative z-10">
           <div className="text-center mb-12">
-            <div className="w-24 h-24 bg-gradient-to-tr from-blue-500 to-cyan-400 rounded-[2.5rem] flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-blue-500/20 transform rotate-3">
-              <svg className="w-12 h-12 text-white -rotate-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-              </svg>
-            </div>
-            <h1 className="text-5xl font-black text-white mb-2 tracking-tighter italic">sgon</h1>
-            <p className="text-slate-400 font-bold tracking-widest uppercase text-[10px] ml-1">Premium Class Experience</p>
+            <h1 className="text-6xl font-bold text-white mb-2 tracking-tight">sgon</h1>
+            <p className="text-slate-400 font-bold tracking-widest uppercase text-[10px] ml-1">학생용 수업 입장</p>
           </div>
 
           <div className="bg-slate-900/40 backdrop-blur-3xl p-6 sm:p-8 rounded-[2.5rem] sm:rounded-[3.5rem] border border-white/5 shadow-3xl space-y-8">
@@ -270,14 +265,9 @@ export default function StudentRoom() {
       {/* Modern App Header */}
       <header className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-2xl border-b border-white/5 px-6 py-5 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-            </svg>
-          </div>
           <div>
-            <h1 className="text-xl font-black tracking-tighter leading-none italic">sgon</h1>
-            <p className="text-[9px] font-bold text-blue-400 uppercase tracking-widest mt-1">{room?.room_name || 'Classroom'}</p>
+            <h1 className="text-xl font-bold tracking-tight leading-none">sgon</h1>
+            <p className="text-[9px] font-bold text-blue-400 uppercase tracking-widest mt-1">{room?.room_name || '수업'}</p>
           </div>
         </div>
         <div className="flex items-center gap-4">

@@ -118,19 +118,14 @@ export default function AdminPanel() {
 
       <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-3xl border-b border-white/5 px-4 sm:px-8 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center shadow-2xl shadow-red-500/20 transform -rotate-6">
-            <svg className="w-6 h-6 text-white rotate-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-          </div>
           <div>
-            <h1 className="text-xl font-black italic tracking-tighter leading-none">sgon admin</h1>
-            <p className="text-[10px] font-black text-red-500 uppercase tracking-widest mt-1">Control Tower</p>
+            <h1 className="text-2xl font-bold tracking-tight leading-none">sgon admin</h1>
+            <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest mt-1">관리자 패널</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-4">
-          <Link href="/teacher" className="hidden sm:flex px-5 py-2.5 bg-white/5 border border-white/10 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all">Dashboard</Link>
+          <Link href="/teacher" className="hidden sm:flex px-5 py-2.5 bg-white/5 border border-white/10 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all">대시보드</Link>
           <button onClick={() => signOut()} className="w-10 h-10 sm:w-12 sm:h-12 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center justify-center hover:bg-red-500/20 transition-all">
             <svg className="w-5 h-5 sm:w-6 sm:h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -147,13 +142,13 @@ export default function AdminPanel() {
               <button
                 key={status}
                 onClick={() => setSelectedStatus(status)}
-                className={`flex-1 min-w-[80px] py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                className={`flex-1 min-w-[80px] py-3 rounded-2xl text-[10px] font-bold uppercase tracking-widest transition-all ${
                   selectedStatus === status
                     ? 'bg-red-500 text-white shadow-xl shadow-red-500/20'
                     : 'bg-white/5 text-slate-500 hover:text-white'
                 }`}
               >
-                {status}
+                {status === 'pending' ? '대기중' : status === 'approved' ? '승인됨' : status === 'rejected' ? '거절됨' : '전체'}
               </button>
             ))}
           </div>
@@ -162,14 +157,14 @@ export default function AdminPanel() {
         {/* Requests Feed */}
         <section className="space-y-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-2">
-            <h2 className="text-2xl sm:text-3xl font-black italic tracking-tighter uppercase leading-none">Feed Control</h2>
-            <span className="px-4 py-2 bg-white/5 border border-white/5 rounded-2xl text-[9px] sm:text-[10px] font-black text-slate-600 tracking-[0.2em] uppercase">{paymentRequests.length} Requests Found</span>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight uppercase leading-none">결제 요청 목록</h2>
+            <span className="px-4 py-2 bg-white/5 border border-white/5 rounded-2xl text-[9px] sm:text-[10px] font-bold text-slate-600 tracking-[0.2em] uppercase">{paymentRequests.length}개의 요청</span>
           </div>
 
           {isLoading ? (
             <div className="py-20 text-center animate-pulse">
               <div className="w-12 h-12 border-4 border-red-500/20 border-t-red-500 rounded-full mx-auto mb-4 animate-spin"></div>
-              <p className="text-slate-500 font-black text-xs uppercase tracking-[0.2em]">Syncing Data...</p>
+              <p className="text-slate-500 font-bold text-xs uppercase tracking-[0.2em]">데이터 동기화 중...</p>
             </div>
           ) : paymentRequests.length === 0 ? (
             <div className="py-20 sm:py-24 text-center bg-slate-900/40 backdrop-blur-xl border border-dashed border-white/5 rounded-[2.5rem] sm:rounded-[3rem]">
@@ -245,17 +240,17 @@ export default function AdminPanel() {
                         </div>
 
                         <div className="flex gap-3">
-                          <button
+                            <button
                             onClick={() => handleReject(request.id)}
-                            className="flex-1 py-4 bg-white/5 border border-white/10 text-red-500 font-black rounded-2xl hover:bg-red-500/10 transition-all active:scale-95 text-[10px] uppercase tracking-widest"
+                            className="flex-1 py-4 bg-white/5 border border-white/10 text-red-500 font-bold rounded-2xl hover:bg-red-500/10 transition-all active:scale-95 text-[10px] uppercase tracking-widest"
                           >
-                            Reject
+                            거절
                           </button>
                           <button
                             onClick={() => handleApprove(request.id)}
-                            className="flex-[2] py-4 bg-gradient-to-r from-red-500 to-pink-600 text-white font-black rounded-2xl shadow-xl shadow-red-500/20 transition-all active:scale-95 text-[10px] uppercase tracking-widest"
+                            className="flex-[2] py-4 bg-gradient-to-r from-red-500 to-pink-600 text-white font-bold rounded-2xl shadow-xl shadow-red-500/20 transition-all active:scale-95 text-[10px] uppercase tracking-widest"
                           >
-                            Approve Payment
+                            결제 승인
                           </button>
                         </div>
                       </div>

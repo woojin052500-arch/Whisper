@@ -17,21 +17,16 @@ export default function Home() {
       <div className="container max-w-lg mx-auto px-6 py-12 relative z-10 flex flex-col min-h-screen">
         {/* Logo / Header */}
         <header className="flex flex-col items-center mb-12 sm:mb-16 pt-8">
-          <div className="w-20 h-20 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-[2.5rem] flex items-center justify-center shadow-2xl shadow-blue-500/20 mb-6 transform rotate-3 hover:rotate-0 transition-transform duration-500 animate-in zoom-in duration-1000">
-            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-            </svg>
-          </div>
-          <h1 className="text-6xl sm:text-7xl font-black tracking-tighter italic mb-4 bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent animate-in slide-in-from-bottom-4 duration-1000">sgon</h1>
-          <p className="text-slate-400 font-black uppercase tracking-[0.4em] text-[9px] sm:text-[10px] bg-white/5 px-5 py-2.5 rounded-full border border-white/5 animate-in fade-in duration-1000 delay-300">
-            Premium Class Interaction
+          <h1 className="text-6xl sm:text-7xl font-bold tracking-tight mb-4 bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent animate-in slide-in-from-bottom-4 duration-1000">sgon</h1>
+          <p className="text-slate-400 font-bold uppercase tracking-[0.4em] text-[9px] sm:text-[10px] bg-white/5 px-5 py-2.5 rounded-full border border-white/5 animate-in fade-in duration-1000 delay-300">
+            실시간 수업 소통 플랫폼
           </p>
         </header>
 
         {/* Main Selection Area */}
         <div className="flex-1 space-y-8 flex flex-col justify-center pb-20">
           <div className="text-center space-y-4 mb-4">
-            <h2 className="text-2xl font-black leading-tight italic tracking-tight">
+            <h2 className="text-2xl font-bold leading-tight tracking-tight">
               가장 조용한 목소리가 만드는<br />
               <span className="text-blue-500">가장 뜨거운 수업</span>
             </h2>
@@ -41,7 +36,7 @@ export default function Home() {
           {/* Student Entrance */}
           <div className="bg-slate-900/60 backdrop-blur-3xl p-8 rounded-[3rem] border border-white/10 shadow-3xl space-y-6">
             <div className="space-y-2">
-              <label className="block text-[10px] font-black text-blue-400 uppercase tracking-widest ml-2">Student Access</label>
+              <label className="block text-[10px] font-bold text-blue-400 uppercase tracking-widest ml-2 text-center">수업 입장</label>
               <input
                 type="text"
                 placeholder="수업 코드를 입력하세요 (6자리)"
@@ -120,12 +115,9 @@ export default function Home() {
       </div>
 
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         body {
-          font-family: 'Outfit', sans-serif;
-        }
-        .italic {
-          font-style: italic;
+          font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
         }
       `}</style>
     </div>

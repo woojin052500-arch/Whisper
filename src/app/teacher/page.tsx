@@ -80,6 +80,12 @@ export default function TeacherDashboard() {
     // Load teacher's rooms
     const rooms = await getRoomsByTeacher(email)
     setMyRooms(rooms)
+
+    // Check tutorial
+    const hasSeenTutorial = localStorage.getItem('has_seen_teacher_tutorial')
+    if (!hasSeenTutorial) {
+      setShowTutorial(true)
+    }
   }
 
   const loadRoom = async (roomId: string) => {
@@ -94,11 +100,6 @@ export default function TeacherDashboard() {
     if (!room) return
     const questionsData = await getQuestionsByRoom(room.id, sortBy)
     setInitialQuestions(questionsData)
-    // Check tutorial
-    const hasSeenTutorial = localStorage.getItem('has_seen_teacher_tutorial')
-    if (!hasSeenTutorial) {
-      setShowTutorial(true)
-    }
   }
 
   const handleUpdateNotice = async () => {
@@ -114,6 +115,11 @@ export default function TeacherDashboard() {
   const handleCreateRoom = async () => {
     if (!roomName.trim() || !teacherId) return
     
+    if (!isPremium) {
+      setShowPaymentPopup(true)
+      return
+    }
+
     setIsLoading(true)
     try {
       const newRoom = await createRoom(roomName, teacherId)
@@ -154,6 +160,10 @@ export default function TeacherDashboard() {
   }
 
   const handleSelectRoom = async (roomData: Room) => {
+    if (!isPremium) {
+      setShowPaymentPopup(true)
+      return
+    }
     setRoom(roomData)
     localStorage.setItem('currentRoomId', roomData.id)
   }
@@ -196,14 +206,9 @@ export default function TeacherDashboard() {
           <div className="absolute top-[-20%] right-[-10%] w-[80%] h-[80%] bg-blue-600 rounded-full blur-[120px] animate-pulse"></div>
         </div>
         <div className="relative z-10 text-center">
-          <div className="relative w-24 h-24 mx-auto mb-8">
-            <div className="absolute inset-0 bg-blue-500 rounded-3xl blur-2xl opacity-20 animate-pulse"></div>
-            <div className="relative w-full h-full bg-slate-900 border border-white/10 rounded-3xl flex items-center justify-center shadow-2xl">
-              <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin"></div>
-            </div>
-          </div>
-          <h2 className="text-2xl font-black text-white tracking-tighter mb-2 italic">sgon</h2>
-          <p className="text-slate-400 font-bold text-sm tracking-widest uppercase animate-pulse">Authenticating...</p>
+          <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full mx-auto mb-6 animate-spin"></div>
+          <h2 className="text-3xl font-bold text-white tracking-tight mb-2">sgon</h2>
+          <p className="text-slate-400 font-bold text-xs tracking-widest uppercase">인증 중...</p>
         </div>
       </div>
     )
@@ -217,13 +222,8 @@ export default function TeacherDashboard() {
         
         <div className="w-full max-w-sm relative z-10">
           <div className="text-center mb-12">
-            <div className="w-24 h-24 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-[2.5rem] flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-blue-500/20 transform rotate-3">
-              <svg className="w-12 h-12 text-white -rotate-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-              </svg>
-            </div>
-            <h1 className="text-5xl font-black text-white mb-2 tracking-tighter italic">sgon</h1>
-            <p className="text-slate-400 font-bold tracking-widest uppercase text-[10px] ml-1">Teacher Dashboard</p>
+            <h1 className="text-6xl font-bold text-white mb-2 tracking-tight">sgon</h1>
+            <p className="text-slate-400 font-bold tracking-widest uppercase text-[10px] ml-1">선생님 대시보드</p>
           </div>
 
           <div className="bg-slate-900/40 backdrop-blur-3xl p-6 sm:p-10 rounded-[2.5rem] sm:rounded-[3.5rem] border border-white/5 shadow-3xl space-y-8">
@@ -389,10 +389,10 @@ export default function TeacherDashboard() {
             </section>
 
             <section className="space-y-8">
-              <h2 className="text-2xl font-black tracking-tight italic uppercase">Create New sgon</h2>
+              <h2 className="text-2xl font-bold tracking-tight uppercase">새 수업 시작하기</h2>
               <div className="p-6 sm:p-10 bg-gradient-to-br from-slate-900 to-slate-950 border border-white/5 rounded-[2.5rem] sm:rounded-[3.5rem] shadow-3xl space-y-8">
                 <div className="space-y-4">
-                  <label className="block text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] ml-2">Room Name</label>
+                  <label className="block text-[10px] font-bold text-blue-400 uppercase tracking-[0.3em] ml-2">수업 이름</label>
                   <input
                     type="text"
                     value={roomName}
@@ -405,9 +405,9 @@ export default function TeacherDashboard() {
                 <button
                   onClick={handleCreateRoom}
                   disabled={isLoading || !roomName.trim()}
-                  className="w-full py-5 sm:py-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-black rounded-2xl sm:rounded-[2rem] shadow-2xl shadow-blue-500/40 active:scale-[0.98] transition-all disabled:opacity-20 text-lg sm:text-xl tracking-tight uppercase"
+                  className="w-full py-5 sm:py-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-2xl sm:rounded-[2rem] shadow-2xl shadow-blue-500/40 active:scale-[0.98] transition-all disabled:opacity-20 text-lg sm:text-xl tracking-tight uppercase"
                 >
-                  {isLoading ? 'Creating...' : 'Start Session'}
+                  {isLoading ? '생성 중...' : '수업 시작하기'}
                 </button>
 
                 <div className="p-6 bg-slate-950/50 rounded-[2rem] border border-white/5">
@@ -436,31 +436,31 @@ export default function TeacherDashboard() {
               </div>
 
               <div className="text-center mb-10 relative z-10">
-                <div className="w-20 h-20 bg-amber-500 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-amber-500/20 transform rotate-6">
-                  <svg className="w-10 h-10 text-white -rotate-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-16 h-16 bg-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-amber-500/20">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-7.714 2.143L11 21l-2.286-6.857L1 12l7.714-2.143L11 3z" />
                   </svg>
                 </div>
-                <h2 className="text-3xl font-black text-white italic tracking-tighter mb-2">sgon Premium</h2>
-                <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">Unlimited Classrooms Access</p>
+                <h2 className="text-3xl font-bold text-white tracking-tight mb-2">sgon 프리미엄</h2>
+                <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">모든 기능을 무제한으로 이용하세요</p>
               </div>
 
               <div className="space-y-6 relative z-10">
                 <div className="p-8 bg-gradient-to-br from-amber-500 to-orange-600 rounded-[2.5rem] text-white shadow-xl shadow-amber-500/20">
                   <div className="flex justify-between items-center mb-1">
-                    <span className="font-black tracking-widest uppercase text-xs opacity-70">Monthly Plan</span>
-                    <span className="font-black text-3xl italic tracking-tighter">990원</span>
+                    <span className="font-bold tracking-widest uppercase text-xs opacity-70">월간 구독</span>
+                    <span className="font-bold text-3xl tracking-tight">990원</span>
                   </div>
-                  <p className="text-xs font-bold opacity-80 uppercase tracking-widest">All features unlocked</p>
+                  <p className="text-xs font-bold opacity-80 uppercase tracking-widest">모든 수업 기능 잠금 해제</p>
                 </div>
 
                 <div className="bg-slate-950/50 rounded-[2.5rem] p-8 border border-white/5 space-y-4">
                   <div className="flex justify-between">
-                    <span className="text-slate-600 font-black uppercase text-[10px] tracking-widest">Account Info</span>
+                    <span className="text-slate-600 font-bold uppercase text-[10px] tracking-widest">입금 계좌</span>
                     <span className="text-white font-bold text-sm">NH농협 3516376760453</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-600 font-black uppercase text-[10px] tracking-widest">Holder</span>
+                    <span className="text-slate-600 font-bold uppercase text-[10px] tracking-widest">예금주</span>
                     <span className="text-white font-bold text-sm">WJedulab</span>
                   </div>
                 </div>
@@ -492,6 +492,7 @@ export default function TeacherDashboard() {
       </div>
 
       {/* Top Header */}
+      {/* Top Header */}
       <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-3xl border-b border-white/5 px-4 sm:px-8 py-3 sm:py-4 flex items-center justify-between">
         <div className="flex items-center gap-3 sm:gap-4">
           <button onClick={() => setRoom(null)} className="w-10 h-10 sm:w-12 sm:h-12 bg-white/5 rounded-xl flex items-center justify-center hover:bg-white/10 transition-all active:scale-90">
@@ -500,16 +501,16 @@ export default function TeacherDashboard() {
             </svg>
           </button>
           <div className="h-6 sm:h-8 w-[1px] bg-white/10 mx-1 sm:mx-2"></div>
-          <div className="max-w-[150px] sm:max-w-none">
-            <h1 className="text-lg sm:text-xl font-black tracking-tighter italic leading-none mb-1">sgon room</h1>
-            <p className="text-[9px] sm:text-[10px] font-black text-blue-400 uppercase tracking-[0.1em] sm:tracking-[0.2em] truncate">{room.room_name}</p>
+          <div className="max-w-[150px] sm:max-w-none text-left">
+            <h1 className="text-lg sm:text-xl font-bold tracking-tight leading-none mb-1">sgon room</h1>
+            <p className="text-[9px] sm:text-[10px] font-bold text-blue-400 uppercase tracking-widest truncate">{room.room_name}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3 sm:gap-6">
           <div className="text-right hidden sm:block">
-            <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest mb-1">Class Code</p>
-            <p className="text-2xl font-black italic tracking-tighter text-blue-500 leading-none">{room?.id?.slice(-6).toUpperCase()}</p>
+            <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-1">수업 코드</p>
+            <p className="text-2xl font-bold tracking-tight text-blue-500 leading-none">{room?.id?.slice(-6).toUpperCase()}</p>
           </div>
           <div className="h-10 w-[1px] bg-white/10 mx-2 hidden sm:block"></div>
           <div className="flex items-center gap-2">
@@ -562,7 +563,7 @@ export default function TeacherDashboard() {
             </div>
 
             <div>
-              <h3 className="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em] mb-4 ml-1 italic text-center sm:text-left">Class Announcement</h3>
+              <h3 className="text-[10px] font-bold text-blue-500 uppercase tracking-[0.3em] mb-4 ml-1 text-center sm:text-left">공지사항</h3>
               <div className="space-y-4">
                 <textarea
                   value={noticeText}
@@ -573,9 +574,9 @@ export default function TeacherDashboard() {
                 <button
                   onClick={handleUpdateNotice}
                   disabled={isUpdatingNotice || !noticeText.trim()}
-                  className="w-full py-4 sm:py-5 bg-blue-500 text-white font-black rounded-2xl shadow-xl shadow-blue-500/20 active:scale-95 transition-all text-[10px] sm:text-sm uppercase tracking-widest"
+                  className="w-full py-4 sm:py-5 bg-blue-500 text-white font-bold rounded-2xl shadow-xl shadow-blue-500/20 active:scale-95 transition-all text-[10px] sm:text-sm uppercase tracking-widest"
                 >
-                  {isUpdatingNotice ? 'Updating...' : 'Post Notice'}
+                  {isUpdatingNotice ? '업데이트 중...' : '공지 게시하기'}
                 </button>
               </div>
             </div>
@@ -585,19 +586,19 @@ export default function TeacherDashboard() {
         {/* Right Column - Questions Feed */}
         <section className="lg:col-span-8 space-y-6 sm:space-y-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-2 sm:px-4">
-            <h2 className="text-2xl sm:text-3xl font-black tracking-tighter italic uppercase">Thread Feed</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight uppercase">질문 목록</h2>
             <div className="flex bg-white/5 rounded-2xl p-1.5 border border-white/5 w-full sm:w-auto">
               <button 
                 onClick={() => setSortBy('latest')}
-                className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all ${sortBy === 'latest' ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-white'}`}
+                className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 rounded-xl text-[9px] sm:text-[10px] font-bold uppercase tracking-widest transition-all ${sortBy === 'latest' ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-white'}`}
               >
-                Latest
+                최신순
               </button>
               <button 
                 onClick={() => setSortBy('likes')}
-                className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all ${sortBy === 'likes' ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-white'}`}
+                className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 rounded-xl text-[9px] sm:text-[10px] font-bold uppercase tracking-widest transition-all ${sortBy === 'likes' ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-white'}`}
               >
-                Popular
+                인기순
               </button>
             </div>
           </div>
@@ -817,31 +818,29 @@ export default function TeacherDashboard() {
                 </svg>
               </div>
 
-            {tutorialStep === 1 && (
               <div className="space-y-12 relative z-10">
-                <div className="w-28 h-28 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-[2.5rem] flex items-center justify-center mx-auto shadow-3xl shadow-blue-500/40 transform rotate-6">
-                  <svg className="w-14 h-14 text-white -rotate-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-20 h-20 bg-blue-500/20 rounded-2xl flex items-center justify-center mx-auto border border-blue-500/30">
+                  <svg className="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                   </svg>
                 </div>
                 <div className="space-y-4">
-                  <h3 className="text-4xl font-black italic tracking-tighter">smart notice</h3>
+                  <h3 className="text-4xl font-bold tracking-tight">실시간 공지</h3>
                   <p className="text-slate-500 font-bold text-lg leading-relaxed">
                     왼쪽 사이드바에서 실시간 공지를 올려보세요.<br/>학생들의 화면 상단에 즉시 나타납니다.
                   </p>
                 </div>
-                <button onClick={() => setTutorialStep(2)} className="w-full py-6 bg-blue-500 text-white font-black rounded-3xl shadow-2xl shadow-blue-500/40 text-xl tracking-tight">다음 (1/2)</button>
+                <button onClick={() => setTutorialStep(2)} className="w-full py-6 bg-blue-500 text-white font-bold rounded-3xl shadow-2xl shadow-blue-500/40 text-xl tracking-tight">다음 (1/2)</button>
               </div>
-            )}
             {tutorialStep === 2 && (
               <div className="space-y-12 relative z-10">
-                <div className="w-28 h-28 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-[2.5rem] flex items-center justify-center mx-auto shadow-3xl shadow-emerald-500/40 transform -rotate-6">
-                  <svg className="w-14 h-14 text-white rotate-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-20 h-20 bg-emerald-500/20 rounded-2xl flex items-center justify-center mx-auto border border-emerald-500/30">
+                  <svg className="w-10 h-10 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                   </svg>
                 </div>
                 <div className="space-y-4">
-                  <h3 className="text-4xl font-black italic tracking-tighter">real-time reply</h3>
+                  <h3 className="text-4xl font-bold tracking-tight">실시간 답변</h3>
                   <p className="text-slate-500 font-bold text-lg leading-relaxed">
                     학생들의 익명 질문(sgon)에 바로 답변하세요.<br/>답변이 등록되면 학생에게 알림이 갑니다.
                   </p>
@@ -851,7 +850,7 @@ export default function TeacherDashboard() {
                     setShowTutorial(false)
                     localStorage.setItem('has_seen_teacher_tutorial', 'true')
                   }} 
-                  className="w-full py-6 bg-emerald-500 text-white font-black rounded-3xl shadow-2xl shadow-emerald-500/40 text-xl tracking-tight"
+                  className="w-full py-6 bg-emerald-500 text-white font-bold rounded-3xl shadow-2xl shadow-emerald-500/40 text-xl tracking-tight"
                 >
                   시작할게요! (2/2)
                 </button>
