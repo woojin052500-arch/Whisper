@@ -259,9 +259,6 @@ export default function StudentRoom() {
     )
   }
 
-    )
-  }
-
   return (
     <div className="min-h-screen bg-slate-950 text-white pb-32 relative overflow-x-hidden">
       {/* Background Glows */}
