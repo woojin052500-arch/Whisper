@@ -259,28 +259,6 @@ export default function StudentRoom() {
     )
   }
 
-            <div className="text-center">
-              <button
-                onClick={() => router.push('/')}
-                className="text-gray-400 hover:text-white transition-colors text-sm"
-              >
-                홈으로 돌아가기
-              </button>
-            </div>
-          </div>
-
-          <div className="mt-6 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
-            <div className="flex gap-3">
-              <svg className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <p className="text-emerald-200 text-sm">
-                비밀번호는 나중에 다시 접속하여 선생님의 답변을 확인할 때 사용됩니다.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
     )
   }
 

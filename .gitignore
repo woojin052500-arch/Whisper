@@ -32,7 +32,6 @@ yarn-error.log*
 
 # env files
 .env*
-src/lib/supabase.ts
 
 # vercel
 .vercel
