@@ -204,8 +204,7 @@ export const updateRoomNotice = async (roomId: string, notice: string): Promise<
     const { error } = await supabase
       .from('rooms')
       .update({ 
-        notice,
-        updated_at: new Date().toISOString()
+        notice
       })
       .eq('id', roomId)
 
