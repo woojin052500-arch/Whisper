@@ -116,7 +116,7 @@ export default function TeacherDashboard() {
     if (!room) return
     setIsUpdatingNotice(true)
     try {
-      const success = await updateRoomNotice(room.id, noticeText)
+      const success = await updateRoomNotice(room.id, noticeText, teacher?.id)
       if (success) {
         const updatedRoom = { ...room, notice: noticeText, updated_at: new Date().toISOString() }
         setRoom(updatedRoom)
