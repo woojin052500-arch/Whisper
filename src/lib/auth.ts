@@ -201,18 +201,26 @@ export const getRoomByCode = async (code: string): Promise<Room | null> => {
 export const updateRoomNotice = async (roomId: string, notice: string): Promise<boolean> => {
   try {
     console.log('Updating notice for room:', roomId, 'with text:', notice)
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('rooms')
       .update({ 
         notice
       })
       .eq('id', roomId)
+      .select()
 
     if (error) {
       console.error('Supabase error updating notice:', error)
       if (typeof window !== 'undefined') localStorage.setItem('sgon_last_error', JSON.stringify(error))
       throw error
     }
+
+    if (!data || data.length === 0) {
+      console.error('No rows updated. Possible RLS violation.')
+      if (typeof window !== 'undefined') localStorage.setItem('sgon_last_error', '권한 부족 (RLS Policy) - 본인의 수업방인지 확인이 필요합니다.')
+      return false
+    }
+
     return true
   } catch (error) {
     console.error('Error in updateRoomNotice:', error)
