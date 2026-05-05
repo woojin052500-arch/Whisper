@@ -123,7 +123,9 @@ export default function TeacherDashboard() {
         setNoticeSuccess(true)
         setTimeout(() => setNoticeSuccess(false), 2000)
       } else {
-        alert('공지 게시 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+        // Find out exactly why it's failing
+        const errorMsg = localStorage.getItem('sgon_last_error') || '알 수 없는 에러'
+        alert(`공지 게시 실패: ${errorMsg}\n\n데이터베이스에 'notice' 컬럼이 있는지 확인이 필요합니다.`);
       }
     } finally {
       setIsUpdatingNotice(false)

@@ -210,11 +210,13 @@ export const updateRoomNotice = async (roomId: string, notice: string): Promise<
 
     if (error) {
       console.error('Supabase error updating notice:', error)
+      if (typeof window !== 'undefined') localStorage.setItem('sgon_last_error', JSON.stringify(error))
       throw error
     }
     return true
   } catch (error) {
     console.error('Error in updateRoomNotice:', error)
+    if (typeof window !== 'undefined' && error instanceof Error) localStorage.setItem('sgon_last_error', error.message)
     return false
   }
 }

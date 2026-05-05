@@ -352,10 +352,10 @@ export default function StudentRoom() {
                     <p className="text-indigo-950 font-bold leading-relaxed text-lg italic">
                       {(realtimeRoom?.notice || room?.notice) || (isLoading ? '공지를 불러오는 중...' : '현재 게시된 공지사항이 없습니다.')}
                     </p>
-                    {/* Debug info - only visible in dev if needed, or keep hidden */}
-                    <div className="hidden">
-                      Debug: RT:{realtimeRoom?.notice} Room:{room?.notice}
-                    </div>
+                    {/* Debug text for the user to report back */}
+                    {!realtimeRoom?.notice && !room?.notice && (
+                      <p className="text-[8px] text-red-500/30 mt-2">DEBUG: ID={room?.id?.slice(0,8)} N={typeof room?.notice}</p>
+                    )}
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-4">
                       최종 업데이트: {new Date(realtimeRoom?.updated_at || room?.updated_at || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
