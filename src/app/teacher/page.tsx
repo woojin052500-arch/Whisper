@@ -882,6 +882,84 @@ export default function TeacherDashboard() {
         </div>
       )}
 
+      {showPaymentPopup && !isPremium && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 bg-indigo-950/40 backdrop-blur-3xl">
+          <div className="bg-white border border-slate-100 rounded-[4rem] p-10 sm:p-14 max-w-lg w-full shadow-2xl space-y-10 relative overflow-hidden animate-in fade-in zoom-in duration-300">
+            {/* Decorative background */}
+            <div className="absolute top-0 right-0 w-48 h-48 bg-amber-50 rounded-full blur-3xl -mr-24 -mt-24 opacity-40"></div>
+            
+            <div className="text-center space-y-6 relative z-10">
+              <div className="w-20 h-20 bg-amber-50 rounded-[2rem] flex items-center justify-center mx-auto shadow-sm transform -rotate-3 border border-amber-100">
+                <svg className="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 className="text-3xl font-bold tracking-tight text-indigo-950">Sgon 프리미엄</h3>
+              <p className="text-slate-500 font-bold text-sm leading-relaxed">
+                한 번의 결제로 모든 기능을 평생 무제한으로.<br/>광고 없는 쾌적한 수업을 시작하세요.
+              </p>
+            </div>
+
+            <div className="bg-slate-50 rounded-[2.5rem] p-8 border border-slate-100 space-y-6 relative z-10">
+              <div className="flex justify-between items-center pb-4 border-b border-slate-200">
+                <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">평생 이용권</span>
+                <span className="text-xl font-bold text-indigo-950 tracking-tight">9,900원</span>
+              </div>
+              
+              <div className="space-y-3">
+                <button 
+                  onClick={() => {
+                    navigator.clipboard.writeText("카카오뱅크 3333-28-0951119 최우진") 
+                    alert('계좌번호가 복사되었습니다.')
+                  }}
+                  className="w-full py-5 bg-white border border-slate-200 text-indigo-950 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-sm hover:border-indigo-950/20 transition-all flex items-center justify-center gap-3 active:scale-95 group"
+                >
+                  <svg className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                  </svg>
+                  계좌 복사
+                </button>
+                
+                <button 
+                  onClick={() => window.open('https://open.kakao.com/o/sId8X4ag', '_blank')}
+                  className="w-full py-5 bg-[#FEE500] text-[#191919] rounded-2xl font-bold text-xs uppercase tracking-widest shadow-sm hover:shadow-lg transition-all flex items-center justify-center gap-3 active:scale-95"
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 3c-4.97 0-9 3.134-9 7 0 2.457 1.63 4.606 4.14 5.92-.15.54-.54 1.95-.62 2.25-.1.38.14.37.29.27.12-.08 1.94-1.32 2.71-1.85.8.14 1.63.21 2.48.21 4.97 0 9-3.134 9-7s-4.03-7-9-7z"/>
+                  </svg>
+                  입금자 확인방 입장
+                </button>
+              </div>
+            </div>
+
+            <div className="flex gap-4 relative z-10">
+              <button 
+                onClick={() => setShowPaymentPopup(false)}
+                className="flex-1 py-5 bg-slate-100 text-slate-400 font-bold rounded-2xl active:scale-95 transition-all text-[10px] uppercase tracking-widest"
+              >
+                나중에
+              </button>
+              <button
+                onClick={async () => {
+                  if (!teacher) return;
+                  setIsRequestingPayment(true);
+                  const success = await requestPaymentVerification(teacher.id);
+                  if (success) {
+                    setPaymentRequested(true);
+                    alert('입금 확인 요청이 전송되었습니다. 관리자 확인 후 처리됩니다.');
+                  }
+                  setIsRequestingPayment(false);
+                }}
+                disabled={isRequestingPayment || paymentRequested}
+                className="flex-[2] py-5 bg-indigo-950 text-white font-bold rounded-2xl shadow-xl shadow-indigo-900/10 active:scale-95 transition-all disabled:opacity-30 text-[10px] uppercase tracking-widest"
+              >
+                {paymentRequested ? '확인 요청됨' : '입금 확인 요청하기'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showTutorial && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-indigo-950/40 backdrop-blur-3xl">
           <div className="bg-white border border-slate-100 rounded-[4rem] p-16 max-w-lg w-full shadow-2xl text-center space-y-12 relative overflow-hidden">
