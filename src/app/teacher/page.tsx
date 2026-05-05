@@ -909,7 +909,7 @@ export default function TeacherDashboard() {
               <div className="space-y-3">
                 <button 
                   onClick={() => {
-                    navigator.clipboard.writeText("카카오뱅크 3333-28-0951119 최우진") 
+                    navigator.clipboard.writeText("카카오뱅크 3333-28-0951119 염우진") 
                     alert('계좌번호가 복사되었습니다.')
                   }}
                   className="w-full py-5 bg-white border border-slate-200 text-indigo-950 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-sm hover:border-indigo-950/20 transition-all flex items-center justify-center gap-3 active:scale-95 group"
