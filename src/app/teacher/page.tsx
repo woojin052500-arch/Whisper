@@ -918,6 +918,7 @@ export default function TeacherDashboard() {
       )}
 
       {showPaymentPopup && !isPremium && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 bg-indigo-950/40 backdrop-blur-3xl">
           <div className="bg-white border border-slate-100 rounded-[4rem] p-10 sm:p-14 max-w-lg w-full shadow-2xl space-y-10 relative overflow-hidden animate-in fade-in zoom-in duration-300">
             {/* Decorative background */}
             <div className="absolute top-0 right-0 w-48 h-48 bg-amber-50 rounded-full blur-3xl -mr-24 -mt-24 opacity-40"></div>
