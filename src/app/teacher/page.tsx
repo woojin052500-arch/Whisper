@@ -28,6 +28,7 @@ export default function TeacherDashboard() {
   const [showPaymentPopup, setShowPaymentPopup] = useState(false)
   const [isFirstLogin, setIsFirstLogin] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [noticeSuccess, setNoticeSuccess] = useState(false)
   const [isRequestingPayment, setIsRequestingPayment] = useState(false)
   const [paymentRequested, setPaymentRequested] = useState(false)
 
@@ -112,7 +113,13 @@ export default function TeacherDashboard() {
     if (!room) return
     setIsUpdatingNotice(true)
     try {
-      await updateRoomNotice(room.id, noticeText)
+      const success = await updateRoomNotice(room.id, noticeText)
+      if (success) {
+        const updatedRoom = { ...room, notice: noticeText, updated_at: new Date().toISOString() }
+        setRoom(updatedRoom)
+        setNoticeSuccess(true)
+        setTimeout(() => setNoticeSuccess(false), 2000)
+      }
     } finally {
       setIsUpdatingNotice(false)
     }
@@ -319,65 +326,75 @@ export default function TeacherDashboard() {
   // Teacher Room Selection / Creation
   if (!room) {
     return (
-      <div className="min-h-screen bg-slate-950 text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-full h-full pointer-events-none opacity-20">
-          <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-blue-600 rounded-full blur-[150px]"></div>
-          <div className="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] bg-indigo-600 rounded-full blur-[150px]"></div>
+      <div className="min-h-screen bg-white text-indigo-950 relative overflow-hidden font-sans">
+        <div className="absolute top-0 right-0 w-full h-full pointer-events-none opacity-5">
+          <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-indigo-500 rounded-full blur-[150px]"></div>
         </div>
 
         <div className="max-w-6xl mx-auto px-6 py-12 relative z-10">
-          <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-12 sm:mb-20">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/20 transform rotate-3">
-                <h1 className="text-3xl font-black italic -rotate-3">s</h1>
+          <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-20 sm:mb-28">
+            <div className="flex items-center gap-5">
+              <div className="w-16 h-16 bg-indigo-950 rounded-3xl flex items-center justify-center shadow-xl shadow-indigo-900/10 transform -rotate-6">
+                <span className="text-4xl font-bold text-white">s</span>
               </div>
               <div>
-                <h1 className="text-3xl font-black tracking-tight italic">sgon board</h1>
-                <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-1">{session?.user?.name} 선생님</p>
+                <h1 className="text-4xl font-bold tracking-tight text-indigo-950">sgon board</h1>
+                <p className="text-slate-400 font-bold uppercase tracking-[0.3em] text-[10px] mt-1.5 ml-0.5">{session?.user?.name} 선생님</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
               <button 
                 onClick={() => setShowPaymentPopup(true)} 
-                className={`px-6 py-3 rounded-2xl font-black text-sm transition-all flex items-center gap-2 ${isPremium ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20 shadow-lg shadow-amber-500/10'}`}
+                className={`px-8 py-4 rounded-[1.5rem] font-bold text-sm transition-all flex items-center gap-3 ${isPremium ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-amber-50 text-amber-600 border border-amber-100 shadow-sm hover:scale-105'}`}
               >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-                {isPremium ? 'Premium Plan' : 'Go Premium'}
+                <div className={`w-2 h-2 rounded-full animate-pulse ${isPremium ? 'bg-emerald-400' : 'bg-amber-400'}`}></div>
+                {isPremium ? '프리미엄 활성화' : '프리미엄 신청'}
               </button>
-              <button onClick={() => signOut()} className="px-5 py-3 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 font-bold transition-all text-xs sm:text-sm">Sign Out</button>
+              <button onClick={() => signOut()} className="px-6 py-4 bg-slate-50 hover:bg-slate-100 text-slate-500 rounded-[1.5rem] border border-slate-100 font-bold transition-all text-sm">로그아웃</button>
             </div>
           </header>
 
-          <div className="grid sm:grid-cols-2 gap-6 sm:gap-12">
-            <section className="space-y-8">
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="text-2xl font-black tracking-tight italic uppercase">My Classrooms</h2>
-                <span className="px-3 py-1 bg-white/5 rounded-full text-[10px] font-black text-slate-500 tracking-[0.2em]">{myRooms.length} Active</span>
+          <div className="grid sm:grid-cols-2 gap-16 sm:gap-24">
+            <section className="space-y-12">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-3xl font-bold tracking-tight text-indigo-950">수업 목록</h2>
+                  <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Managed Classes</p>
+                </div>
+                <div className="px-5 py-2 bg-indigo-50 rounded-2xl border border-indigo-100">
+                  <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest">{myRooms.length} Active</span>
+                </div>
               </div>
               
               {myRooms.length === 0 ? (
-                <div className="p-10 sm:p-20 text-center bg-slate-900/40 backdrop-blur-xl border border-dashed border-white/5 rounded-[2rem] sm:rounded-[3rem]">
-                  <p className="text-slate-500 font-bold mb-4 sm:mb-6 italic text-sm sm:text-base">아직 생성된 수업방이 없습니다.</p>
-                  <p className="text-slate-700 text-[10px] sm:text-xs font-bold uppercase tracking-widest">Create your first sgon room</p>
+                <div className="py-24 text-center bg-slate-50 border border-dashed border-slate-200 rounded-[3rem] group hover:border-indigo-200 transition-colors">
+                  <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-sm border border-slate-100 group-hover:scale-110 transition-transform">
+                    <svg className="w-10 h-10 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                  </div>
+                  <p className="text-slate-400 font-bold mb-4">아직 생성된 수업방이 없습니다.</p>
+                  <p className="text-indigo-950/20 text-[10px] font-bold uppercase tracking-widest">첫 번째 수업방을 만들어보세요</p>
                 </div>
               ) : (
-                <div className="grid gap-4">
+                <div className="grid gap-6">
                   {myRooms.map((r) => (
                     <button 
                       key={r.id}
                       onClick={() => handleSelectRoom(r)}
-                      className="group p-6 sm:p-8 bg-slate-900/60 backdrop-blur-xl border border-white/5 rounded-[2rem] sm:rounded-[2.5rem] hover:bg-blue-600/10 hover:border-blue-500/30 transition-all text-left relative overflow-hidden"
+                      className="group p-10 bg-white border border-slate-100 rounded-[3rem] hover:border-indigo-950/20 hover:shadow-2xl hover:shadow-indigo-900/5 transition-all text-left relative overflow-hidden shadow-sm"
                     >
-                      <div className="absolute top-0 left-0 w-1.5 sm:w-2 h-full bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                       <div className="flex justify-between items-center">
                         <div>
-                          <h4 className="text-lg sm:text-xl font-black mb-1 group-hover:text-blue-400 transition-colors">{r.room_name}</h4>
-                          <p className="text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-widest">{new Date(r.created_at).toLocaleDateString()}</p>
+                          <div className="flex items-center gap-3 mb-2">
+                            <span className="w-2 h-2 bg-indigo-950 rounded-full"></span>
+                            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Room ID: {r.id.slice(-6).toUpperCase()}</p>
+                          </div>
+                          <h4 className="text-2xl font-bold text-indigo-950 mb-2 group-hover:translate-x-1 transition-transform">{r.room_name}</h4>
+                          <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">{new Date(r.created_at).toLocaleDateString()}</p>
                         </div>
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/5 rounded-xl sm:rounded-2xl flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all">
-                          <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="w-14 h-14 bg-slate-50 rounded-[1.5rem] flex items-center justify-center group-hover:bg-indigo-950 group-hover:text-white transition-all shadow-sm">
+                          <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                           </svg>
                         </div>
@@ -388,31 +405,39 @@ export default function TeacherDashboard() {
               )}
             </section>
 
-            <section className="space-y-8">
-              <h2 className="text-2xl font-bold tracking-tight uppercase">새 수업 시작하기</h2>
-              <div className="p-6 sm:p-10 bg-gradient-to-br from-slate-900 to-slate-950 border border-white/5 rounded-[2.5rem] sm:rounded-[3.5rem] shadow-3xl space-y-8">
+            <section className="space-y-12">
+              <div>
+                <h2 className="text-3xl font-bold tracking-tight text-indigo-950">새 수업 시작</h2>
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Initialize Session</p>
+              </div>
+              <div className="p-10 bg-white border border-slate-100 rounded-[3.5rem] shadow-xl shadow-indigo-900/5 space-y-10">
                 <div className="space-y-4">
-                  <label className="block text-[10px] font-bold text-blue-400 uppercase tracking-[0.3em] ml-2">수업 이름</label>
+                  <label className="block text-[10px] font-bold text-indigo-950 uppercase tracking-[0.4em] ml-1">수업 명칭</label>
                   <input
                     type="text"
                     value={roomName}
                     onChange={(e) => setRoomName(e.target.value)}
                     placeholder="예: 3학년 2반 수학교실"
-                    className="w-full px-6 py-5 bg-white/5 border border-white/10 text-white rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all font-bold placeholder:text-slate-800 text-base sm:text-lg"
+                    className="w-full px-8 py-7 bg-slate-50 border border-slate-100 text-indigo-950 rounded-[2rem] focus:outline-none focus:ring-4 focus:ring-indigo-950/5 transition-all font-bold placeholder:text-slate-200 text-xl shadow-inner"
                   />
                 </div>
                 
                 <button
                   onClick={handleCreateRoom}
                   disabled={isLoading || !roomName.trim()}
-                  className="w-full py-5 sm:py-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-2xl sm:rounded-[2rem] shadow-2xl shadow-blue-500/40 active:scale-[0.98] transition-all disabled:opacity-20 text-lg sm:text-xl tracking-tight uppercase"
+                  className="w-full py-7 bg-indigo-950 text-white font-bold rounded-[2rem] shadow-xl shadow-indigo-900/20 active:scale-[0.98] transition-all disabled:opacity-30 text-xl tracking-tight"
                 >
                   {isLoading ? '생성 중...' : '수업 시작하기'}
                 </button>
 
-                <div className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100">
-                  <div className="flex gap-4">
-                    <p className="text-slate-400 text-xs font-medium leading-relaxed">수업방을 생성하면 고유 코드가 발급됩니다. 학생들은 sgon 웹사이트에서 코드만 입력하면 즉시 참여할 수 있습니다.</p>
+                <div className="p-8 bg-indigo-50/50 rounded-[2rem] border border-indigo-100">
+                  <div className="flex items-start gap-4">
+                    <svg className="w-6 h-6 text-indigo-950 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p className="text-indigo-950/60 text-sm font-medium leading-relaxed">
+                      수업방을 생성하면 고유 코드가 발급됩니다. 학생들은 sgon 웹사이트에서 코드만 입력하면 즉시 참여할 수 있습니다.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -573,7 +598,6 @@ export default function TeacherDashboard() {
                 <button 
                   onClick={() => {
                     navigator.clipboard.writeText(`${window.location.origin}/student/${room.id}`)
-                    // Simple toast-like feedback
                     setIsLoading(true)
                     setTimeout(() => setIsLoading(false), 2000)
                   }}
@@ -599,9 +623,9 @@ export default function TeacherDashboard() {
                 <button
                   onClick={handleUpdateNotice}
                   disabled={isUpdatingNotice || !noticeText.trim()}
-                  className="w-full py-4 sm:py-5 bg-blue-600 text-white font-bold rounded-2xl shadow-lg shadow-blue-600/10 active:scale-95 transition-all text-[10px] sm:text-xs uppercase tracking-widest"
+                  className={`w-full py-5 rounded-2xl font-bold shadow-lg transition-all text-xs uppercase tracking-widest ${noticeSuccess ? 'bg-emerald-500 text-white shadow-emerald-500/10' : 'bg-indigo-950 text-white shadow-indigo-900/10 active:scale-95'}`}
                 >
-                  {isUpdatingNotice ? '업데이트 중...' : '공지 게시하기'}
+                  {isUpdatingNotice ? '업데이트 중...' : (noticeSuccess ? '공지 게시 완료!' : '공지 게시하기')}
                 </button>
               </div>
             </div>
@@ -761,11 +785,11 @@ export default function TeacherDashboard() {
 
       {/* Room Management Panel Overlay */}
       {showRoomManagement && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-slate-950/90 backdrop-blur-2xl">
-          <div className="bg-slate-900 border border-white/10 rounded-[2.5rem] sm:rounded-[4rem] p-8 sm:p-12 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-3xl relative">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-indigo-950/20 backdrop-blur-xl">
+          <div className="bg-white border border-slate-100 rounded-[3rem] sm:rounded-[4rem] p-8 sm:p-12 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
             <div className="flex justify-between items-center mb-12">
-              <h2 className="text-3xl font-black italic tracking-tighter uppercase">Room Manager</h2>
-              <button onClick={() => setShowRoomManagement(false)} className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-white/10 transition-all">
+              <h2 className="text-3xl font-bold tracking-tight text-indigo-950">수업 통합 관리</h2>
+              <button onClick={() => setShowRoomManagement(false)} className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center hover:bg-slate-100 transition-all text-slate-400">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -774,40 +798,40 @@ export default function TeacherDashboard() {
 
             <div className="space-y-12">
               {/* Add New Room Section */}
-              <div className="bg-slate-950/50 rounded-[3rem] p-10 border border-white/5 shadow-inner">
-                <h3 className="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em] mb-6 italic ml-2">Quick Add Room</h3>
+              <div className="bg-slate-50 rounded-[3rem] p-10 border border-slate-100">
+                <h3 className="text-[10px] font-bold text-indigo-950 uppercase tracking-[0.3em] mb-6 ml-2">수업 바로 추가하기</h3>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <input
                     type="text"
                     value={roomName}
                     onChange={(e) => setRoomName(e.target.value)}
-                    placeholder="New classroom name..."
-                    className="flex-1 px-8 py-6 bg-white/5 border border-white/10 text-white rounded-3xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all font-bold placeholder:text-slate-800 text-lg"
+                    placeholder="수업 이름을 입력하세요..."
+                    className="flex-1 px-8 py-6 bg-white border border-slate-100 text-indigo-950 rounded-3xl focus:outline-none focus:ring-4 focus:ring-indigo-950/5 transition-all font-bold placeholder:text-slate-200 text-lg"
                   />
                   <button
                     onClick={handleCreateRoom}
                     disabled={isLoading || !roomName.trim()}
-                    className="px-10 py-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-black rounded-3xl shadow-xl shadow-blue-500/30 active:scale-95 transition-all disabled:opacity-20 text-lg"
+                    className="px-10 py-6 bg-indigo-950 text-white font-bold rounded-3xl shadow-xl shadow-indigo-900/10 active:scale-95 transition-all disabled:opacity-20 text-lg"
                   >
-                    {isLoading ? 'Creating...' : 'Create'}
+                    {isLoading ? '생성 중...' : '생성하기'}
                   </button>
                 </div>
               </div>
 
               {/* Room List Section */}
               <div className="space-y-6">
-                <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-2 italic ml-2">Your Classrooms ({myRooms.length})</h3>
+                <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-2 ml-2">나의 수업 목록 ({myRooms.length})</h3>
                 <div className="grid sm:grid-cols-2 gap-4">
                   {myRooms.map((roomData) => (
-                    <div key={roomData.id} className="group p-8 bg-white/5 border border-white/10 rounded-[2.5rem] hover:bg-white/[0.08] transition-all flex items-center justify-between shadow-lg">
+                    <div key={roomData.id} className="group p-8 bg-white border border-slate-100 rounded-[2.5rem] hover:border-indigo-950/20 transition-all flex items-center justify-between shadow-sm">
                       <div>
-                        <h4 className="text-xl font-black mb-1 group-hover:text-blue-400 transition-colors">{roomData.room_name}</h4>
-                        <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest leading-none mt-1">Code: {roomData.id?.slice(-6).toUpperCase()}</p>
+                        <h4 className="text-xl font-bold text-indigo-950 mb-1">{roomData.room_name}</h4>
+                        <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest leading-none mt-1">Code: {roomData.id?.slice(-6).toUpperCase()}</p>
                       </div>
-                      <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex gap-2">
                         <button 
                           onClick={() => { handleSelectRoom(roomData); setShowRoomManagement(false); }}
-                          className="w-10 h-10 bg-blue-500 text-white rounded-xl flex items-center justify-center hover:scale-110 transition-all active:scale-90"
+                          className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center hover:bg-indigo-950 hover:text-white transition-all active:scale-90"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
@@ -815,7 +839,7 @@ export default function TeacherDashboard() {
                         </button>
                         <button 
                           onClick={() => handleDeleteRoom(roomData.id)}
-                          className="w-10 h-10 bg-red-500/20 text-red-500 rounded-xl flex items-center justify-center hover:bg-red-500 hover:text-white transition-all active:scale-90"
+                          className="w-10 h-10 bg-red-50 text-red-500 rounded-xl flex items-center justify-center hover:bg-red-500 hover:text-white transition-all active:scale-90"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -831,12 +855,11 @@ export default function TeacherDashboard() {
         </div>
       )}
 
-      {/* Interactive Teacher Tutorial Overlay */}
       {showTutorial && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-slate-950/95 backdrop-blur-2xl">
-          <div className="bg-slate-900 border border-white/10 rounded-[4rem] p-16 max-w-lg w-full shadow-3xl text-center space-y-12 relative overflow-hidden">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-indigo-950/40 backdrop-blur-3xl">
+          <div className="bg-white border border-slate-100 rounded-[4rem] p-16 max-w-lg w-full shadow-2xl text-center space-y-12 relative overflow-hidden">
              <div className="absolute top-0 right-0 p-8 opacity-5">
-                <svg className="w-48 h-48 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-48 h-48 text-indigo-950" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12V12a1 1 0 002 0v-1.012l.21.09a1 1 0 01.59 1.15l-1 4a1 1 0 01-1.807.45L1.894 14.87a1 1 0 011.416-1.414l.89.89 1.11-4.44l-2-.857a1 1 0 010-1.84L3.31 9.397z" />
                 </svg>
               </div>

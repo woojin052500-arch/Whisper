@@ -23,6 +23,7 @@ export default function StudentRoom() {
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null)
   const [showTutorial, setShowTutorial] = useState(false)
   const [tutorialStep, setTutorialStep] = useState(1)
+  const [activeView, setActiveView] = useState<'home' | 'questions'>('home')
 
   // Use real-time questions hook
   const allQuestions = useRealtimeQuestions(room?.id || '', initialQuestions)
@@ -138,31 +139,13 @@ export default function StudentRoom() {
     setIsSubmitting(false)
   }
 
-  const handleLikeQuestion = async (questionId: string) => {
-    const success = await likeQuestion(questionId)
-    if (success) {
-      await loadStudentQuestions(student!.id)
-    }
-  }
-
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 relative overflow-hidden">
-        {/* Animated Background Gradients */}
-        <div className="absolute top-0 right-0 w-full h-full pointer-events-none opacity-20">
-          <div className="absolute top-[-20%] right-[-10%] w-[80%] h-[80%] bg-blue-600 rounded-full blur-[120px] animate-pulse"></div>
-          <div className="absolute bottom-[-20%] left-[-10%] w-[80%] h-[80%] bg-indigo-600 rounded-full blur-[120px] animate-pulse"></div>
-        </div>
-
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 relative overflow-hidden font-sans">
         <div className="relative z-10 text-center">
-          <div className="relative w-24 h-24 mx-auto mb-8">
-            <div className="absolute inset-0 bg-blue-500 rounded-3xl blur-2xl opacity-20 animate-pulse"></div>
-            <div className="relative w-full h-full bg-slate-900 border border-white/10 rounded-3xl flex items-center justify-center shadow-2xl">
-              <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin"></div>
-            </div>
-          </div>
-          <h2 className="text-2xl font-black text-white tracking-tighter mb-2 italic">sgon</h2>
-          <p className="text-slate-400 font-bold text-sm tracking-widest uppercase animate-pulse">Experience Loading...</p>
+          <div className="w-12 h-12 border-4 border-slate-100 border-t-indigo-950 rounded-full mx-auto mb-6 animate-spin"></div>
+          <h2 className="text-3xl font-bold text-indigo-950 tracking-tight mb-2">sgon</h2>
+          <p className="text-slate-400 font-bold text-xs tracking-widest uppercase">데이터를 불러오는 중...</p>
         </div>
       </div>
     )
@@ -170,22 +153,20 @@ export default function StudentRoom() {
 
   if (error && !room) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 relative overflow-hidden">
-        <div className="w-full max-w-sm bg-slate-900/40 backdrop-blur-3xl rounded-[2.5rem] p-8 sm:p-10 border border-white/5 shadow-3xl relative z-10">
-          <div className="text-center mb-10">
-            <div className="w-20 h-20 bg-red-500/10 rounded-[2rem] flex items-center justify-center mx-auto mb-6 border border-red-500/20">
-              <svg className="w-10 h-10 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-indigo-950 tracking-tight mb-2">수업방을 찾을 수 없습니다</h2>
-            <p className="text-slate-400 text-sm font-medium">{error}</p>
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 relative overflow-hidden font-sans">
+        <div className="w-full max-w-sm bg-white rounded-[2.5rem] p-8 sm:p-10 border border-slate-200 shadow-xl relative z-10 text-center">
+          <div className="w-20 h-20 bg-red-50 rounded-[2rem] flex items-center justify-center mx-auto mb-6 border border-red-100">
+            <svg className="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
           </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-indigo-950 tracking-tight mb-2">방을 찾을 수 없습니다</h2>
+          <p className="text-slate-400 text-sm font-medium mb-8">{error}</p>
           <button
             onClick={() => router.push('/')}
-            className="w-full py-4 sm:py-5 bg-indigo-950 text-white font-bold rounded-2xl shadow-lg shadow-indigo-900/10 transition-all active:scale-[0.98] text-sm uppercase tracking-widest"
+            className="w-full py-5 bg-indigo-950 text-white font-bold rounded-2xl shadow-lg shadow-indigo-900/10 transition-all active:scale-[0.98] text-sm uppercase tracking-widest"
           >
-            홈으로 이동
+            홈으로 가기
           </button>
         </div>
       </div>
@@ -284,7 +265,7 @@ export default function StudentRoom() {
               localStorage.removeItem(`student_session_${roomId}`)
               window.location.reload()
             }}
-            className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/10 active:scale-90 transition-all"
+            className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 active:scale-90 transition-all"
           >
             <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -294,39 +275,71 @@ export default function StudentRoom() {
       </header>
 
       <main className="px-4 sm:px-6 py-6 sm:py-8 relative z-10 max-w-2xl mx-auto">
-        {/* Dynamic Notice Bar */}
-        {(realtimeRoom?.notice || room?.notice) && (
-          <div className="bg-indigo-50 border border-indigo-100 rounded-[2rem] p-6 sm:p-8 mb-8 sm:mb-10 animate-in slide-in-from-top-4 shadow-sm">
-            <div className="flex items-start gap-4">
-              <div className="flex-1">
-                <p className="text-[10px] font-bold text-indigo-900 uppercase tracking-[0.2em] mb-1">선생님의 공지</p>
-                <p className="text-indigo-950 font-bold leading-relaxed text-lg">{realtimeRoom?.notice || room?.notice}</p>
+        {activeView === 'home' ? (
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4">
+            {/* Hero Welcome */}
+            <div className="bg-indigo-950 text-white rounded-[2.5rem] p-8 sm:p-10 shadow-2xl shadow-indigo-900/20 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
+              <div className="relative z-10">
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] opacity-60 mb-2">Welcome Back</p>
+                <h2 className="text-3xl font-bold tracking-tight mb-6">{student.nickname}님,<br/>반가워요! 👋</h2>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white/5 backdrop-blur-md rounded-2xl p-4 border border-white/10">
+                    <p className="text-[9px] font-bold uppercase opacity-50 mb-1">나의 질문</p>
+                    <p className="text-xl font-bold">{myQuestions.length}</p>
+                  </div>
+                  <div className="bg-white/5 backdrop-blur-md rounded-2xl p-4 border border-white/10">
+                    <p className="text-[9px] font-bold uppercase opacity-50 mb-1">답변 완료</p>
+                    <p className="text-xl font-bold text-emerald-400">{myQuestions.filter(q => q.status === 'answered').length}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Dynamic Notice Section */}
+            <div className="space-y-4">
+              <h3 className="text-[10px] font-bold text-indigo-950 uppercase tracking-[0.3em] ml-2">선생님 공지사항</h3>
+              <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-sm">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center shrink-0">
+                    <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-indigo-950 font-bold leading-relaxed text-lg italic">
+                      {realtimeRoom?.notice || room?.notice || '현재 게시된 공지사항이 없습니다.'}
+                    </p>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-4">
+                      최종 업데이트: {new Date(realtimeRoom?.updated_at || room?.updated_at || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Actions / Stats */}
+            <div className="bg-slate-50 rounded-[2.5rem] p-8 border border-slate-100">
+              <h3 className="text-[10px] font-bold text-indigo-950 uppercase tracking-[0.3em] mb-6">수업 정보</h3>
+              <div className="space-y-6">
+                <div className="flex justify-between items-center pb-6 border-b border-slate-200">
+                  <span className="text-slate-400 text-xs font-bold uppercase tracking-widest">수업 코드</span>
+                  <span className="text-indigo-950 font-bold text-lg tracking-tight uppercase">{room?.id?.slice(-6)}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-400 text-xs font-bold uppercase tracking-widest">수업 참여 인원</span>
+                  <span className="text-indigo-950 font-bold text-lg tracking-tight">실시간 접속 중</span>
+                </div>
               </div>
             </div>
           </div>
-        )}
-
-        {/* Floating Add Button for Mobile */}
-        <button 
-          onClick={() => {
-            const modal = document.getElementById('question_modal') as any
-            if (modal) modal.showModal()
-          }}
-          className="fixed bottom-24 right-6 w-16 h-16 bg-indigo-950 rounded-[1.5rem] shadow-xl shadow-indigo-900/20 flex items-center justify-center z-50 active:scale-90 transition-all group"
-        >
-          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-          </svg>
-        </button>
-
-        {/* Question List Section */}
-        <section className="space-y-6">
-          <div className="flex items-center justify-between px-2">
-            <div>
+        ) : (
+          <div className="animate-in fade-in slide-in-from-bottom-4">
+            <div className="flex items-center justify-between mb-8 px-2">
               <h2 className="text-2xl font-bold tracking-tight text-indigo-950">질문 내역</h2>
               <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-1">총 {myQuestions.length}개의 질문</p>
             </div>
-          </div>
 
           {myQuestions.length === 0 ? (
             <div className="py-16 sm:py-24 text-center bg-slate-50 border border-dashed border-slate-200 rounded-[2rem] sm:rounded-[3rem]">
@@ -376,17 +389,21 @@ export default function StudentRoom() {
               ))}
             </div>
           )}
-        </section>
+        </div>
+      )}
       </main>
 
       {/* Premium Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 w-full z-40 px-4 sm:px-6 py-6 sm:py-10 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none">
         <div className="max-w-xs mx-auto bg-white/90 backdrop-blur-2xl border border-slate-200 rounded-[3rem] p-2 flex items-center shadow-2xl shadow-indigo-900/10 pointer-events-auto">
-          <button className="flex-1 py-4 flex flex-col items-center gap-1 group transition-all">
-            <svg className="w-5 h-5 text-indigo-950" fill="currentColor" viewBox="0 0 20 20">
+          <button 
+            onClick={() => setActiveView('home')}
+            className={`flex-1 py-4 flex flex-col items-center gap-1 transition-all ${activeView === 'home' ? 'text-indigo-950' : 'text-slate-300'}`}
+          >
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.879.879a1 1 0 001.414-1.414l-7-7z" />
             </svg>
-            <span className="text-[9px] font-bold uppercase tracking-widest text-indigo-950">Home</span>
+            <span className="text-[9px] font-bold uppercase tracking-widest">Home</span>
           </button>
           
           <button 
@@ -398,12 +415,15 @@ export default function StudentRoom() {
             </svg>
           </button>
 
-          <button className="flex-1 py-4 flex flex-col items-center gap-1 group transition-all opacity-30">
-            <svg className="w-5 h-5 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
+          <button 
+            onClick={() => setActiveView('questions')}
+            className={`flex-1 py-4 flex flex-col items-center gap-1 transition-all ${activeView === 'questions' ? 'text-indigo-950' : 'text-slate-300'}`}
+          >
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
               <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
             </svg>
-            <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400">Task</span>
+            <span className="text-[9px] font-bold uppercase tracking-widest">sgon</span>
           </button>
         </div>
       </nav>

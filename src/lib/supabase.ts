@@ -22,21 +22,25 @@ export type Database = {
         Row: {
           id: string
           created_at: string
+          updated_at: string
           room_name: string
           teacher_id: string
           is_active: boolean
+          notice: string | null
         }
         Insert: {
           id?: string
           room_name: string
           teacher_id: string
           is_active?: boolean
+          notice?: string | null
         }
         Update: {
           id?: string
           room_name?: string
           teacher_id?: string
           is_active?: boolean
+          notice?: string | null
         }
       }
       students: {

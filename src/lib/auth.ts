@@ -15,6 +15,7 @@ export type Room = {
   teacher_id: string
   is_active: boolean
   created_at: string
+  updated_at: string
   notice?: string
 }
 
@@ -201,7 +202,10 @@ export const updateRoomNotice = async (roomId: string, notice: string): Promise<
   try {
     const { error } = await supabase
       .from('rooms')
-      .update({ notice })
+      .update({ 
+        notice,
+        updated_at: new Date().toISOString()
+      })
       .eq('id', roomId)
 
     if (error) throw error
