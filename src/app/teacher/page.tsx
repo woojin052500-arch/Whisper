@@ -81,6 +81,12 @@ export default function TeacherDashboard() {
     const rooms = await getRoomsByTeacher(email)
     setMyRooms(rooms)
 
+    // Check payment status
+    if ((teacherData as any)?.payment_status === 'pending') {
+      setPaymentRequested(true)
+      setShowPaymentPopup(true)
+    }
+
     // Check tutorial
     const hasSeenTutorial = localStorage.getItem('has_seen_teacher_tutorial')
     if (!hasSeenTutorial) {
@@ -198,14 +204,17 @@ export default function TeacherDashboard() {
 
   const roomUrl = room ? `${window.location.origin}/student/${room.id}` : ''
 
-  // Show loading while checking auth
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 relative overflow-hidden font-sans">
-      <div className="relative z-10 text-center">
-        <div className="w-12 h-12 border-4 border-slate-100 border-t-indigo-950 rounded-full mx-auto mb-6 animate-spin"></div>
-        <h2 className="text-3xl font-bold text-indigo-950 tracking-tight mb-2">sgon</h2>
-        <p className="text-slate-400 font-bold text-xs tracking-widest uppercase">인증 중...</p>
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 relative overflow-hidden font-sans">
+        <div className="relative z-10 text-center">
+          <div className="w-12 h-12 border-4 border-slate-100 border-t-indigo-950 rounded-full mx-auto mb-6 animate-spin"></div>
+          <h2 className="text-3xl font-bold text-indigo-950 tracking-tight mb-2">sgon</h2>
+          <p className="text-slate-400 font-bold text-xs tracking-widest uppercase">인증 중...</p>
+        </div>
       </div>
-    </div>
+    )
+  }
 
   // Redirect to sign in if not authenticated
   if (!session) {
@@ -258,47 +267,47 @@ export default function TeacherDashboard() {
         <div className="max-w-6xl mx-auto px-6 py-12 relative z-10">
           <header className="flex items-center justify-between mb-16">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-red-500 rounded-2xl flex items-center justify-center shadow-2xl shadow-red-500/20 transform -rotate-6">
+              <div className="w-14 h-14 bg-indigo-950 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-900/10 transform -rotate-6">
                 <svg className="w-8 h-8 text-white rotate-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
               </div>
               <div>
-                <h1 className="text-3xl font-black tracking-tight italic">sgon Admin</h1>
-                <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-1">Full Control Access</p>
+                <h1 className="text-3xl font-bold tracking-tight text-indigo-950">sgon Admin</h1>
+                <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px] mt-1">관리자 전용 대시보드</p>
               </div>
             </div>
-            <button onClick={() => signOut()} className="px-6 py-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 font-bold transition-all">Sign Out</button>
+            <button onClick={() => signOut()} className="px-6 py-3 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl border border-slate-100 font-bold transition-all active:scale-95">로그아웃</button>
           </header>
 
           <div className="grid md:grid-cols-3 gap-8 mb-16">
-            <Link href="/admin" className="p-8 bg-slate-900/60 backdrop-blur-xl border border-white/5 rounded-[3rem] hover:bg-slate-800/60 transition-all group">
-              <div className="w-14 h-14 bg-red-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <svg className="w-7 h-7 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <Link href="/admin" className="p-8 bg-white border border-slate-100 rounded-[3rem] hover:border-indigo-950/20 transition-all group shadow-sm">
+              <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <svg className="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-black mb-2">결제 승인 관리</h3>
+              <h3 className="text-xl font-bold text-indigo-950 mb-2">결제 승인 관리</h3>
               <p className="text-slate-500 text-sm font-medium">선생님들의 프리미엄 결제 요청을 실시간으로 확인하고 승인합니다.</p>
             </Link>
 
-            <button onClick={() => setShowRoomManagement(true)} className="p-8 bg-slate-900/60 backdrop-blur-xl border border-white/5 rounded-[3rem] hover:bg-slate-800/60 transition-all group text-left">
-              <div className="w-14 h-14 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <svg className="w-7 h-7 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button onClick={() => setShowRoomManagement(true)} className="p-8 bg-white border border-slate-100 rounded-[3rem] hover:border-indigo-950/20 transition-all group text-left shadow-sm">
+              <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <svg className="w-7 h-7 text-indigo-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
               </div>
-              <h3 className="text-xl font-black mb-2">전체 룸 관리</h3>
+              <h3 className="text-xl font-bold text-indigo-950 mb-2">전체 수업방 관리</h3>
               <p className="text-slate-500 text-sm font-medium">현재 생성된 모든 sgon 수업방 목록을 조회하고 관리합니다.</p>
             </button>
 
-            <div className="p-8 bg-slate-900/60 backdrop-blur-xl border border-white/5 rounded-[3rem]">
-              <div className="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center mb-6">
-                <svg className="w-7 h-7 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-8 bg-white border border-slate-100 rounded-[3rem] shadow-sm">
+              <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-6">
+                <svg className="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-black mb-2">시스템 현황</h3>
+              <h3 className="text-xl font-bold text-indigo-950 mb-2">시스템 현황</h3>
               <p className="text-slate-500 text-sm font-medium">활성 사용자 수와 실시간 트래픽 데이터를 모니터링합니다.</p>
             </div>
           </div>
@@ -422,40 +431,71 @@ export default function TeacherDashboard() {
                   </svg>
                 </div>
                 <h2 className="text-3xl font-bold text-indigo-950 tracking-tight mb-2">sgon 프리미엄</h2>
-                <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">모든 기능을 무제한으로 이용하세요</p>
+                <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">{paymentRequested ? '입금 확인 요청 완료' : '모든 기능을 무제한으로 이용하세요'}</p>
               </div>
 
               <div className="space-y-6 relative z-10">
-                <div className="p-8 bg-indigo-950 rounded-[2.5rem] text-white shadow-xl shadow-indigo-900/20">
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="font-bold tracking-widest uppercase text-xs opacity-70">월간 구독</span>
-                    <span className="font-bold text-3xl tracking-tight">990원</span>
+                {paymentRequested ? (
+                  <div className="p-8 bg-indigo-50 border border-indigo-100 rounded-[2.5rem] text-center space-y-4">
+                    <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto shadow-sm">
+                      <div className="w-8 h-8 border-4 border-indigo-50 border-t-indigo-950 rounded-full animate-spin"></div>
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-bold text-indigo-950 mb-2">입금 확인 중입니다</h4>
+                      <p className="text-slate-500 text-sm leading-relaxed font-medium">관리자가 입금을 확인하는 대로<br/>프리미엄 기능이 활성화됩니다.</p>
+                    </div>
+                    <div className="pt-4">
+                      <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-4">입금이 늦어지나요?</p>
+                      <button 
+                        onClick={() => window.open('https://open.kakao.com/o/g3INItti', '_blank')}
+                        className="w-full py-4 bg-[#FEE500] text-slate-900 rounded-2xl font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all"
+                      >
+                        카톡으로 재문의하기
+                      </button>
+                    </div>
                   </div>
-                  <p className="text-xs font-bold opacity-80 uppercase tracking-widest">모든 수업 기능 잠금 해제</p>
-                </div>
+                ) : (
+                  <>
+                    <div className="p-8 bg-indigo-950 rounded-[2.5rem] text-white shadow-xl shadow-indigo-900/20">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="font-bold tracking-widest uppercase text-xs opacity-70">월간 구독</span>
+                        <span className="font-bold text-3xl tracking-tight">990원</span>
+                      </div>
+                      <p className="text-xs font-bold opacity-80 uppercase tracking-widest">모든 수업 기능 잠금 해제</p>
+                    </div>
 
-                <div className="bg-slate-50 rounded-[2.5rem] p-8 border border-slate-100 space-y-4">
-                  <div className="flex justify-between">
-                    <span className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">입금 계좌</span>
-                    <span className="text-indigo-950 font-bold text-sm">NH농협 3516376760453</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">예금주</span>
-                    <span className="text-indigo-950 font-bold text-sm">WJedulab</span>
-                  </div>
-                </div>
+                    <div className="bg-slate-50 rounded-[2.5rem] p-8 border border-slate-100 space-y-4">
+                      <div className="flex justify-between">
+                        <span className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">입금 계좌</span>
+                        <span className="text-indigo-950 font-bold text-sm">NH농협 3516376760453</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">예금주</span>
+                        <span className="text-indigo-950 font-bold text-sm">WJedulab</span>
+                      </div>
+                    </div>
+                  </>
+                )}
 
                 <div className="flex gap-3">
                   <button onClick={() => {
                     navigator.clipboard.writeText('NH농협 3516376760453')
                     alert('계좌번호가 복사되었습니다.')
                   }} className="flex-1 py-5 bg-slate-50 border border-slate-200 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-slate-100 transition-all text-slate-600">계좌 복사</button>
-                  <button onClick={async () => {
-                    if (session?.user?.email) {
-                      await requestPaymentVerification(session.user.email)
-                    }
-                    window.open('https://open.kakao.com/o/g3INItti', '_blank')
-                  }} className="flex-1 py-5 bg-[#FEE500] text-slate-900 rounded-2xl font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all">카톡 문의</button>
+                  <button 
+                    disabled={isRequestingPayment}
+                    onClick={async () => {
+                      setIsRequestingPayment(true)
+                      if (session?.user?.email) {
+                        await requestPaymentVerification(session.user.email)
+                        setPaymentRequested(true)
+                      }
+                      window.open('https://open.kakao.com/o/g3INItti', '_blank')
+                      setIsRequestingPayment(false)
+                    }} className="flex-1 py-5 bg-[#FEE500] text-slate-900 rounded-2xl font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all disabled:opacity-50"
+                  >
+                    {isRequestingPayment ? '처리 중...' : '카톡 문의'}
+                  </button>
                 </div>
 
                 <button onClick={() => setShowPaymentPopup(false)} className="w-full py-4 sm:py-5 text-slate-400 font-bold text-[10px] sm:text-xs uppercase tracking-[0.3em] hover:text-slate-600 transition-all">나중에 하기</button>
@@ -515,49 +555,51 @@ export default function TeacherDashboard() {
       <main className="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-8 relative z-10 grid lg:grid-cols-12 gap-6 sm:gap-8">
         {/* Left Column - Notice & Actions */}
         <aside className="lg:col-span-4 space-y-6 sm:space-y-8">
-          <section className="bg-slate-900/60 backdrop-blur-xl border border-white/5 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-8 shadow-2xl space-y-6 sm:space-y-8">
+          <section className="bg-white border border-slate-100 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-8 shadow-sm space-y-6 sm:space-y-8">
             <div>
-              <h3 className="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em] mb-4 ml-1 italic">Class Management</h3>
+              <h3 className="text-[10px] font-bold text-indigo-950 uppercase tracking-[0.3em] mb-4 ml-1">수업 관리</h3>
               <div className="space-y-4">
-                <div className="p-6 bg-slate-950/50 rounded-3xl border border-white/5 space-y-4">
+                <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100 space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-500 text-[10px] font-black uppercase tracking-widest italic">Total Questions</span>
-                    <span className="text-2xl font-black italic">{questions.length}</span>
+                    <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">전체 질문</span>
+                    <span className="text-2xl font-bold text-indigo-950">{questions.length}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-500 text-[10px] font-black uppercase tracking-widest italic">Answered</span>
-                    <span className="text-2xl font-black italic text-emerald-500">{questions.filter(q => q.status === 'answered').length}</span>
+                    <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">답변 완료</span>
+                    <span className="text-2xl font-bold text-emerald-500">{questions.filter(q => q.status === 'answered').length}</span>
                   </div>
                 </div>
                 
                 <button 
                   onClick={() => {
                     navigator.clipboard.writeText(`${window.location.origin}/student/${room.id}`)
-                    alert('Student link copied!')
+                    // Simple toast-like feedback
+                    setIsLoading(true)
+                    setTimeout(() => setIsLoading(false), 2000)
                   }}
-                  className="w-full py-5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-3"
+                  className="w-full py-5 bg-indigo-950 text-white rounded-2xl font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-lg shadow-indigo-900/10 active:scale-95"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                   </svg>
-                  Copy Student Link
+                  {isLoading ? '복사 완료!' : '수업 링크 복사'}
                 </button>
               </div>
             </div>
 
             <div>
-              <h3 className="text-[10px] font-bold text-blue-500 uppercase tracking-[0.3em] mb-4 ml-1 text-center sm:text-left">공지사항</h3>
+              <h3 className="text-[10px] font-bold text-indigo-950 uppercase tracking-[0.3em] mb-4 ml-1">공지사항</h3>
               <div className="space-y-4">
                 <textarea
                   value={noticeText}
                   onChange={(e) => setNoticeText(e.target.value)}
                   placeholder="공지사항을 입력하세요..."
-                  className="w-full h-24 sm:h-32 bg-slate-950/50 border border-white/5 text-white p-4 sm:p-5 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-bold placeholder:text-slate-800 text-xs sm:text-sm resize-none"
+                  className="w-full h-24 sm:h-32 bg-slate-50 border border-slate-100 text-slate-900 p-4 sm:p-5 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-950/5 transition-all font-bold placeholder:text-slate-200 text-xs sm:text-sm resize-none shadow-sm"
                 />
                 <button
                   onClick={handleUpdateNotice}
                   disabled={isUpdatingNotice || !noticeText.trim()}
-                  className="w-full py-4 sm:py-5 bg-blue-500 text-white font-bold rounded-2xl shadow-xl shadow-blue-500/20 active:scale-95 transition-all text-[10px] sm:text-sm uppercase tracking-widest"
+                  className="w-full py-4 sm:py-5 bg-blue-600 text-white font-bold rounded-2xl shadow-lg shadow-blue-600/10 active:scale-95 transition-all text-[10px] sm:text-xs uppercase tracking-widest"
                 >
                   {isUpdatingNotice ? '업데이트 중...' : '공지 게시하기'}
                 </button>
@@ -587,49 +629,49 @@ export default function TeacherDashboard() {
 
           <div className="grid gap-6">
             {questions.length === 0 ? (
-              <div className="p-32 text-center bg-slate-900/40 backdrop-blur-xl border border-dashed border-white/5 rounded-[4rem]">
-                <div className="w-24 h-24 bg-slate-950/50 rounded-[2rem] flex items-center justify-center mx-auto mb-8 opacity-20">
-                  <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="p-32 text-center bg-slate-50 border border-dashed border-slate-200 rounded-[4rem]">
+                <div className="w-24 h-24 bg-white rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-sm">
+                  <svg className="w-12 h-12 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                   </svg>
                 </div>
-                <p className="text-slate-600 font-black text-xl italic uppercase tracking-tighter mb-2">No threads yet</p>
-                <p className="text-slate-800 text-sm font-bold tracking-widest uppercase">Waiting for students to sgon...</p>
+                <p className="text-indigo-950 font-bold text-xl tracking-tight mb-2">아직 질문이 없습니다</p>
+                <p className="text-slate-400 text-sm font-bold tracking-widest uppercase">학생들이 질문을 남길 때까지 기다려주세요</p>
               </div>
             ) : (
               questions.map((q) => (
                 <div 
                   key={q.id} 
-                  className="bg-slate-900/60 backdrop-blur-xl border border-white/5 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-8 hover:bg-slate-800/60 transition-all group relative overflow-hidden shadow-xl"
+                  className="bg-white border border-slate-100 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-8 hover:border-slate-200 transition-all group relative overflow-hidden shadow-sm"
                 >
-                  <div className={`absolute top-0 left-0 w-2 h-full transition-colors ${q.status === 'answered' ? 'bg-emerald-500' : 'bg-blue-500'}`}></div>
+                  <div className={`absolute top-0 left-0 w-2 h-full transition-colors ${q.status === 'answered' ? 'bg-emerald-500' : 'bg-blue-600'}`}></div>
                   
                   <div className="flex justify-between items-start gap-8">
                     <div className="flex-1 space-y-6">
                       <div className="flex items-center gap-3">
-                        <span className={`text-[9px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-2xl ${q.status === 'answered' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-blue-500/20 text-blue-400'}`}>
-                          {q.status === 'answered' ? 'Replied' : 'Pending'}
+                        <span className={`text-[9px] font-bold uppercase tracking-[0.2em] px-4 py-2 rounded-2xl ${q.status === 'answered' ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'}`}>
+                          {q.status === 'answered' ? '답변 완료' : '대기 중'}
                         </span>
-                        <span className="text-slate-600 text-[10px] font-black uppercase tracking-tighter">
-                          {new Date(q.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                        <span className="text-slate-300 text-[10px] font-bold uppercase tracking-tighter">
+                          {new Date(q.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
                         </span>
                         {q.likes_count > 0 && (
-                          <span className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/10 text-amber-500 rounded-xl text-[10px] font-black uppercase tracking-widest border border-amber-500/10">
+                          <span className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-600 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-amber-100">
                             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" /></svg>
                             {q.likes_count}
                           </span>
                         )}
                       </div>
                       
-                      <p className="text-white font-bold text-2xl leading-relaxed tracking-tight">{q.content}</p>
+                      <p className="text-indigo-950 font-bold text-2xl leading-relaxed tracking-tight">{q.content}</p>
 
                       {q.status === 'answered' && q.answer_content && (
-                        <div className="mt-8 pt-8 border-t border-white/5 space-y-4">
+                        <div className="mt-8 pt-8 border-t border-slate-50 space-y-4">
                           <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                            <span className="text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em]">Teacher Response</span>
+                            <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
+                            <span className="text-emerald-600 text-[10px] font-bold uppercase tracking-[0.3em]">선생님의 답변</span>
                           </div>
-                          <p className="text-slate-400 text-lg font-medium leading-relaxed italic">{q.answer_content}</p>
+                          <p className="text-slate-500 text-lg font-medium leading-relaxed italic">{q.answer_content}</p>
                         </div>
                       )}
                     </div>

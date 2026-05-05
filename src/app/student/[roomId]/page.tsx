@@ -192,16 +192,21 @@ export default function StudentRoom() {
     )
   }
 
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 relative overflow-hidden font-sans">
+  if (!student) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 relative overflow-hidden font-sans">
       {/* Background elements */}
       <div className="fixed inset-0 z-0">
         <div className="absolute top-[-10%] right-[-10%] w-[70%] h-[70%] bg-blue-50/50 rounded-full blur-[120px] opacity-20"></div>
       </div>
         
         <div className="w-full max-w-sm relative z-10">
-          <div className="text-center mb-12">
-            <h1 className="text-6xl font-bold text-indigo-950 mb-2 tracking-tight">sgon</h1>
-            <p className="text-slate-400 font-bold tracking-widest uppercase text-[10px] ml-1">학생용 수업 입장</p>
+          <div className="text-center mb-10">
+            <h1 className="text-6xl font-bold text-indigo-950 mb-4 tracking-tight">sgon</h1>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-indigo-50 border border-indigo-100 rounded-full">
+              <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse"></div>
+              <p className="text-indigo-900 font-bold text-[10px] uppercase tracking-widest">{room?.room_name || '수업 참여'}</p>
+            </div>
           </div>
 
           <div className="bg-white p-6 sm:p-8 rounded-[2.5rem] sm:rounded-[3.5rem] border border-slate-200 shadow-xl space-y-8">
@@ -230,8 +235,8 @@ export default function StudentRoom() {
             </div>
 
             {error && (
-              <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl animate-in fade-in slide-in-from-top-2">
-                <p className="text-red-400 text-xs font-bold text-center leading-relaxed">{error}</p>
+              <div className="p-4 bg-red-50 border border-red-100 rounded-2xl animate-in fade-in slide-in-from-top-2">
+                <p className="text-red-600 text-xs font-bold text-center leading-relaxed">{error}</p>
               </div>
             )}
 
@@ -432,50 +437,45 @@ export default function StudentRoom() {
 
       {/* Answer Detail View Modal */}
       {selectedQuestion && activeQuestion && (
-        <dialog id="detail_modal" className="modal modal-bottom sm:modal-middle bg-slate-950/80 backdrop-blur-md open">
-          <div className="modal-box bg-slate-900 border border-white/10 rounded-t-[2rem] sm:rounded-[3rem] p-6 sm:p-10 shadow-3xl">
-            <div className="w-16 h-1.5 bg-slate-800 rounded-full mx-auto mb-8 sm:hidden"></div>
+        <dialog id="detail_modal" className="modal modal-bottom sm:modal-middle bg-slate-900/40 backdrop-blur-md open">
+          <div className="modal-box bg-white border border-slate-200 rounded-t-[2rem] sm:rounded-[3rem] p-6 sm:p-10 shadow-2xl">
+            <div className="w-16 h-1.5 bg-slate-100 rounded-full mx-auto mb-8 sm:hidden"></div>
             
             <div className="flex items-center gap-3 mb-6 sm:mb-8">
-              <span className={`text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl ${
-                activeQuestion.status === 'answered' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-blue-500/20 text-blue-400'
+              <span className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl ${
+                activeQuestion.status === 'answered' ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'
               }`}>
-                {activeQuestion.status === 'answered' ? 'Teacher Answered' : 'Waiting for Reply'}
+                {activeQuestion.status === 'answered' ? '선생님 답변 완료' : '답변 대기 중'}
               </span>
             </div>
 
             <div className="space-y-8 sm:space-y-10">
-              <div className="p-6 sm:p-8 bg-white/5 rounded-[1.5rem] sm:rounded-[2.5rem] border border-white/10 shadow-inner">
-                <p className="text-[9px] sm:text-[10px] font-black text-slate-600 uppercase tracking-[0.3em] mb-2 sm:mb-3 text-right italic">Student Thread</p>
-                <p className="text-white font-bold text-lg sm:text-xl leading-relaxed">{activeQuestion.content}</p>
+              <div className="p-6 sm:p-8 bg-slate-50 rounded-[1.5rem] sm:rounded-[2.5rem] border border-slate-100">
+                <p className="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-2 sm:mb-3 text-right">나의 질문</p>
+                <p className="text-indigo-950 font-bold text-lg sm:text-xl leading-relaxed">{activeQuestion.content}</p>
               </div>
 
               {activeQuestion.status === 'answered' ? (
-                <div className="p-6 sm:p-8 bg-gradient-to-br from-emerald-600/20 to-teal-600/20 rounded-[1.5rem] sm:rounded-[2.5rem] border border-emerald-500/30 relative overflow-hidden shadow-2xl">
-                  <div className="absolute top-4 right-6 opacity-10">
-                    <svg className="w-16 h-16 sm:w-24 sm:h-24 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <p className="text-[9px] sm:text-[10px] font-black text-emerald-400 uppercase tracking-[0.3em] mb-3 sm:mb-4 italic">Teacher's Reply</p>
-                  <p className="text-white font-bold text-lg sm:text-xl leading-relaxed">{activeQuestion.answer_content || '답변이 완료되었습니다.'}</p>
+                <div className="p-6 sm:p-8 bg-emerald-50 rounded-[1.5rem] sm:rounded-[2.5rem] border border-emerald-100 relative overflow-hidden">
+                  <p className="text-[9px] sm:text-[10px] font-bold text-emerald-600 uppercase tracking-[0.3em] mb-3 sm:mb-4">선생님의 답변</p>
+                  <p className="text-emerald-950 font-bold text-lg sm:text-xl leading-relaxed">{activeQuestion.answer_content || '답변이 완료되었습니다.'}</p>
                 </div>
               ) : (
-                <div className="py-12 sm:py-16 text-center animate-pulse">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                    <svg className="w-8 h-8 sm:w-10 sm:h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="py-12 sm:py-16 text-center">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                    <svg className="w-8 h-8 sm:w-10 sm:h-10 text-indigo-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <p className="text-slate-500 font-black text-base sm:text-lg tracking-tight italic">선생님의 소중한 답변을 기다리고 있어요...</p>
+                  <p className="text-slate-400 font-bold text-base sm:text-lg tracking-tight">선생님의 답변을 기다리고 있어요</p>
                 </div>
               )}
 
               <button 
                 onClick={() => setSelectedQuestion(null)}
-                className="w-full py-5 sm:py-6 bg-slate-800 text-white font-black rounded-2xl sm:rounded-3xl active:scale-95 transition-all text-base sm:text-lg tracking-tight shadow-xl uppercase"
+                className="w-full py-5 sm:py-6 bg-indigo-950 text-white font-bold rounded-2xl sm:rounded-3xl active:scale-95 transition-all text-base sm:text-lg tracking-tight shadow-lg shadow-indigo-900/10"
               >
-                Close
+                닫기
               </button>
             </div>
           </div>
@@ -483,12 +483,12 @@ export default function StudentRoom() {
         </dialog>
       )}
 
-      {/* Interactive Tutorial Modal (Premium sgon Style) */}
+      {/* Interactive Tutorial Modal */}
       {showTutorial && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-slate-950/95 backdrop-blur-2xl">
-          <div className="w-full max-w-md bg-slate-900 rounded-[2.5rem] sm:rounded-[3.5rem] border border-white/10 p-8 sm:p-12 relative overflow-hidden shadow-3xl">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-white/90 backdrop-blur-2xl">
+          <div className="w-full max-w-md bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border border-slate-200 p-8 sm:p-12 relative overflow-hidden shadow-2xl">
             <div className="absolute top-0 right-0 p-8 opacity-5">
-              <svg className="w-48 h-48 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-48 h-48 text-indigo-950" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
               </svg>
             </div>
@@ -497,29 +497,31 @@ export default function StudentRoom() {
               {tutorialStep === 1 && (
                 <div className="space-y-10">
                   <div className="w-28 h-28 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-[2.5rem] flex items-center justify-center mx-auto shadow-3xl shadow-blue-500/40 transform rotate-3">
-                    <svg className="w-14 h-14 text-white -rotate-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="space-y-10">
+                  <div className="w-28 h-28 bg-indigo-50 rounded-[2.5rem] flex items-center justify-center mx-auto shadow-sm transform -rotate-3">
+                    <svg className="w-14 h-14 text-indigo-950 -rotate-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                     </svg>
                   </div>
                   <div className="space-y-4">
-                    <h3 className="text-4xl font-black text-white italic tracking-tighter">hello sgon</h3>
-                    <p className="text-slate-500 font-bold leading-relaxed text-lg">
+                    <h3 className="text-4xl font-bold text-indigo-950 tracking-tight text-center">반가워요!</h3>
+                    <p className="text-slate-500 font-bold leading-relaxed text-lg text-center">
                       선생님께 무엇이든 소곤소곤 물어보세요.<br/>오직 선생님과 나만의 대화입니다.
                     </p>
                   </div>
-                  <button onClick={() => setTutorialStep(2)} className="w-full py-6 bg-blue-500 text-white font-black rounded-3xl shadow-2xl shadow-blue-500/40 text-xl tracking-tight">다음 (1/2)</button>
+                  <button onClick={() => setTutorialStep(2)} className="w-full py-6 bg-indigo-950 text-white font-bold rounded-3xl shadow-lg shadow-indigo-900/10 text-xl tracking-tight active:scale-95 transition-all">다음 (1/2)</button>
                 </div>
               )}
               {tutorialStep === 2 && (
                 <div className="space-y-10">
-                  <div className="w-28 h-28 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-[2.5rem] flex items-center justify-center mx-auto shadow-3xl shadow-emerald-500/40 transform -rotate-3">
-                    <svg className="w-14 h-14 text-white rotate-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-28 h-28 bg-emerald-50 rounded-[2.5rem] flex items-center justify-center mx-auto shadow-sm transform -rotate-3">
+                    <svg className="w-14 h-14 text-emerald-600 rotate-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                     </svg>
                   </div>
                   <div className="space-y-4">
-                    <h3 className="text-4xl font-black text-white italic tracking-tighter">real-time</h3>
-                    <p className="text-slate-500 font-bold leading-relaxed text-lg">
+                    <h3 className="text-4xl font-bold text-indigo-950 tracking-tight text-center">실시간 공지</h3>
+                    <p className="text-slate-500 font-bold leading-relaxed text-lg text-center">
                       상단에 뜨는 선생님의 공지를 놓치지 마세요.<br/>중요한 소식이 실시간으로 전달됩니다.
                     </p>
                   </div>
@@ -528,7 +530,7 @@ export default function StudentRoom() {
                       setShowTutorial(false)
                       localStorage.setItem('has_seen_student_tutorial', 'true')
                     }} 
-                    className="w-full py-6 bg-emerald-500 text-white font-black rounded-3xl shadow-2xl shadow-emerald-500/40 text-xl tracking-tight"
+                    className="w-full py-6 bg-emerald-500 text-white font-bold rounded-3xl shadow-lg shadow-emerald-500/10 text-xl tracking-tight active:scale-95 transition-all"
                   >
                     시작할게요! (2/2)
                   </button>
