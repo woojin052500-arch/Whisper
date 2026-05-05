@@ -42,11 +42,13 @@ export default function TeacherDashboard() {
   const realtimeRoom = useRealtimeRoom(room?.id || '', room)
 
   useEffect(() => {
-    // Only set if user is not currently typing
-    if (realtimeRoom?.notice) {
-      setNoticeText(prev => prev === '' ? realtimeRoom.notice! : prev)
+    // Initialize notice text from room data if not already set
+    if (realtimeRoom?.notice && noticeText === '') {
+      setNoticeText(realtimeRoom.notice)
+    } else if (room?.notice && noticeText === '') {
+      setNoticeText(room.notice)
     }
-  }, [realtimeRoom])
+  }, [realtimeRoom, room])
 
   useEffect(() => {
     // We no longer auto-load the last room to ensure teacher lands on the Home screen
@@ -120,6 +122,8 @@ export default function TeacherDashboard() {
         setRoom(updatedRoom)
         setNoticeSuccess(true)
         setTimeout(() => setNoticeSuccess(false), 2000)
+      } else {
+        alert('공지 게시 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
       }
     } finally {
       setIsUpdatingNotice(false)
