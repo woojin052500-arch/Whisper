@@ -493,10 +493,8 @@ export default function StudentRoom() {
               </svg>
             </div>
             
-            <div className="relative z-10 text-center">
+            <div className="relative z-10">
               {tutorialStep === 1 && (
-                <div className="space-y-10">
-                  <div className="w-28 h-28 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-[2.5rem] flex items-center justify-center mx-auto shadow-3xl shadow-blue-500/40 transform rotate-3">
                 <div className="space-y-10">
                   <div className="w-28 h-28 bg-indigo-50 rounded-[2.5rem] flex items-center justify-center mx-auto shadow-sm transform -rotate-3">
                     <svg className="w-14 h-14 text-indigo-950 -rotate-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
