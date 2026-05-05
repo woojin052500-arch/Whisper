@@ -286,7 +286,7 @@ export default function StudentRoom() {
             onClick={() => {
               localStorage.removeItem(`student_auth_${roomId}`)
               localStorage.removeItem(`student_session_${roomId}`)
-              window.location.reload()
+              router.push('/')
             }}
             className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 active:scale-90 transition-all"
           >

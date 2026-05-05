@@ -99,15 +99,15 @@ export default function Home() {
                     className="group bg-white border border-slate-100 p-8 rounded-[2.5rem] flex items-center justify-between hover:border-indigo-950/20 hover:shadow-2xl hover:shadow-indigo-900/5 transition-all active:scale-[0.98] shadow-sm"
                   >
                     <div className="flex items-center gap-5">
-                      <div className="w-12 h-12 bg-indigo-950 rounded-2xl flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-indigo-950/20 group-hover:scale-110 transition-transform">
-                        {room.id.slice(0, 2).toUpperCase()}
+                      <div className="w-12 h-12 bg-indigo-950 rounded-2xl flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-indigo-950/20 group-hover:scale-110 transition-transform shrink-0">
+                        {room.name.slice(0, 1).toUpperCase()}
                       </div>
-                      <div>
-                        <h4 className="text-lg font-bold text-slate-900 group-hover:text-indigo-950 transition-colors leading-tight">{room.name}</h4>
-                        <div className="flex items-center gap-3 mt-1.5">
-                          <span className="text-[10px] font-bold text-indigo-900/40 uppercase tracking-widest">Code: {room.id}</span>
+                      <div className="min-w-0">
+                        <h4 className="text-lg font-bold text-slate-900 group-hover:text-indigo-950 transition-colors leading-tight truncate">{room.name}</h4>
+                        <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                          <span className="text-[10px] font-bold text-indigo-900/40 uppercase tracking-widest bg-indigo-50/50 px-2 py-0.5 rounded-md">#{room.id.slice(-6).toUpperCase()}</span>
                           <span className="w-1 h-1 bg-slate-200 rounded-full"></span>
-                          <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">{new Date(room.lastJoined).toLocaleDateString()}</p>
+                          <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">{new Date(room.lastJoined).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })}</p>
                         </div>
                       </div>
                     </div>
